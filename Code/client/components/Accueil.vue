@@ -1,6 +1,7 @@
 <template>
     <div>
-        <p>test</p>
+        <p class="alert alert-primary center">test</p>
+        <button class="btn btn-primary">Test</button>
     </div>
 </template>
 
