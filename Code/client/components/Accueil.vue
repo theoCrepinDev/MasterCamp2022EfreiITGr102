@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p class="alert alert-primary center">test</p>
+        <p class="alert alert-primary center">test : {{test}}</p>
         <button class="btn btn-primary">Test</button>
     </div>
 </template>
@@ -13,7 +13,7 @@ module.exports = {
     data(){
 
         return{
-
+            test : 'data test'
         }
     },
     methods:{
