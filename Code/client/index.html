@@ -18,11 +18,11 @@
 <body>
     <div id="app">
         <header>
-            
+            <router-link to='/login'>Login</router-link>
         </header>
         <main>
             <router-view
-            
+            @login="login"
             ></router-view>
         </main>
     </div>
