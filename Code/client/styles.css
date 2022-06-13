@@ -1,3 +1,89 @@
+*{
+    font-family: 'Poppins';
+    font-style: normal;
+}
+
 .btn-primary{
     background-color: red; /* Changer couleur des btn-primary */
+}
+
+html{
+    padding: 0;
+}
+body{
+    padding: 0;
+}
+
+/* Nav bar */
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled){
+    border: none;
+}
+
+.navbar>.container, .navbar>.container-fluid, .navbar>.container-lg, .navbar>.container-md, .navbar>.container-sm, .navbar>.container-xl, .navbar>.container-xxl{
+    flex-wrap: unset;
+}
+
+.collapse:not(.show){
+    display: unset;
+}
+
+.nav-link{
+    font-size: 24px;
+}
+
+.navbar-nav .nav-link.active, .navbar-nav .show>.nav-link {
+    color: white;
+}
+
+.navbar-nav{
+    flex-direction: row;
+    justify-content: space-between;
+    width: 400px;
+    margin-left: 50px;
+}
+
+#navbarSupportedContent{
+    width: 300px;
+    flex-basis: unset;
+    flex-grow: unset;
+}
+
+.d-flex{
+    width: 280px;
+    justify-content: space-between;
+    margin-right: 60px;
+}
+
+/* Page de vote */
+/* affichage candidats */
+.row ,.row-cols-1, .row-cols-md-3 , .g-4{
+    justify-content: space-between;    
+}
+
+
+.grille-candidats{
+    margin-top: 30px;
+    width:70%;
+    margin-left: 15%;
+}
+
+.titre-grille-candidats{
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.search-candidat{
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: 0!important;
+}
+
+#img-loupe{
+    border: 1px solid #ced4da;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
