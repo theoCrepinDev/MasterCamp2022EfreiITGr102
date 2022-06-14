@@ -1,9 +1,11 @@
 const Accueil = window.httpVueLoader("./components/Accueil.vue")
 const Login = window.httpVueLoader('./components/login.vue')
+const Error = window.httpVueLoader('./components/Error.vue')
 
 const routes =[
     {path : '/', component: Accueil},
-    { path: '/login', component: Login, name: 'login' }
+    { path: '/login', component: Login, name: 'login' },
+    { path: '/Error', component: Error, name: 'Error' }
 ]
 
 const router = new VueRouter({
