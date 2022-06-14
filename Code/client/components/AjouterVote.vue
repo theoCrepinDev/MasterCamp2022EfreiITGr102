@@ -25,6 +25,10 @@
                         <label for="descriptionVoteInput" class="form-label">Description</label>
                         <textarea id="descriptionVoteInput" class="form-control" v-model="suffrage.description" required></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="dateFinVoteInput" class="form-label">Description</label>
+                        <input type="date" id="dateFinVoteInput" class="form-control" v-model="suffrage.dateFin" required>
+                    </div>
                     <button type="submit" v-if="validation === false "  class="btn btn-primary col-md-6 offset-md-3">Suivant</button>
                     <button type="button" @click="enregistreModificationsSuffrage" v-if="validation === true "  class="btn btn-primary col-md-6 offset-md-3">Enregistrer</button>
 
@@ -37,6 +41,7 @@
             <div class="card-body col-md-8 offset-md-2">
                 <h5 class="card-title">{{suffrage.nom}}</h5>
                 <p class="card-text">{{suffrage.description}}</p>
+                <p class="card-text">{{suffrage.dateFin}}</p>
                 <button type="button" @click="modifierSuffrage" class="btn btn-dessous btn-primary">Modifier</button>
             </div>
         </div>
@@ -156,6 +161,7 @@ props:{
             suffrage:{
                 nom:'',
                 description:'',
+                dateFin: Date.now(),
                 candidats:[],
                 votants:[]
             },
@@ -183,7 +189,8 @@ props:{
             this.suffrage.candidats = this.ajoutCandidats;
             this.suffrage.votants = this.ajoutParticipants;
             this.avancerEtape()
-            console.log(this.suffrage)
+            this.$emit('ajouter-suffrage', this.suffrage)
+            this.$router.push('/Accueil');
         },
         votantSupplementaire(){
             if(this.ajoutParticipant === ''){
@@ -196,7 +203,6 @@ props:{
             this.afficherFormulaireVotant = false;
         },
         ajouterCandidat(){
-            console.log('ok')
             this.afficherFormulaireCandidat = true;
         },
         candidatSupplementaire(){
@@ -253,7 +259,6 @@ props:{
 
                 }
             }
-            console.log(this.etape)
         },
         modifierCandidat(candidat){
             this.editCandidat = true;

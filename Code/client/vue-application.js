@@ -21,6 +21,11 @@ var app = new Vue({
         this.listeCandidat = res.data;
     },
     methods:{
-        
+        async ajouterSuffrage(data){
+            await axios.post('/api/suffrage', data).then(async response => {
+                console.log(response.message)
+            })
+                
+        }
     }
 })
