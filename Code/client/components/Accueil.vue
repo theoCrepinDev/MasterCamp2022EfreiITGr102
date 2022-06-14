@@ -16,7 +16,7 @@
     </div>
 
     <div class="partieDroiteAccueil container col-md-5 ">
-        <img src="../images/voteAccueil.png" class="col-md-12" alt="Vote YesWeVote">
+        <img src="../images/image_accueil.png" class="col-md-12" alt="Vote YesWeVote">
     </div>
    </div>
 </template>
