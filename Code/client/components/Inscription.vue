@@ -1,5 +1,10 @@
 <template>
-  <form id="form-connexion">
+<div class="container row">
+
+<div id="image-fond" class="col col-md-15"></div>
+<div class="col col-md-5">
+
+<form id="form-connexion" >
   <h1 style="color:#E30000;">INSCRIPTION</h1>
   <h2 style="color:#63634;">Inscrivez vos informations !</h2>
 
@@ -16,7 +21,8 @@
 
    <div class="form-group3">
     <label for="InputEmail">Email</label>
-    <input type="Email" class="form-control" id="InputEmail" placeholder="Entrer votre Email" autofocus="" required="">
+    <input type="Email" class="form-control" id="InputEmail" placeholder="Entrer votre Email" pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+    required>
   </div>
 
    <div class="form-group3">
@@ -30,20 +36,23 @@
    </div>
 
 <button type="button" class="btn btn-danger btn-lg btn-block">Inscription</button>
-<p class="lien"> Vous avez déjà un Compte ? <a href="/Connexion" style="color:#E30000;" >Connectez-vous </a> </p>
-<div id="image-fond"></div>
+<p class="lien"> Vous avez déjà un compte ? <a href="/Connexion" style="color:#E30000;" >Connectez-vous </a> </p>
 
 
   </form>
+
+</div>
+</div>
+  
 </template>
 
 <style scoped>
  
 
 #form-connexion {
-  width:26%;
+  /*width:26%;
   margin-top:5%;
-  margin-left:55%;
+  margin-left:55%;*/
 
 }
 
@@ -65,7 +74,7 @@ h2 {
 }
 
 .btn-danger{
-  margin-left: 95px;
+  margin-left: 70px;
   margin-top: 5%;
   width: 60%;
 
@@ -85,26 +94,20 @@ h2 {
   margin-top: 5%;
 }
 .lien{
-  margin-left: 90px;
+  margin-left: 50px;
   margin-top: 5%;
   font-family: "Gill Sans", sans-serif;
   font-size: smaller;
 }
 
-input[type=checkbox] {
-  width: 10px;
-}
- 
-input[type=submit] {
-  width: 150px;
-  padding: 10px;
-}
 
 #image-fond {
-height: 400px;
-width: 300px;
-margin-left: 100px;
+height: 750px;
+margin-left: -25px;
 margin-right: auto;
-background-image:url("../assets/fond1.png");
+max-width: 900%;
+
+background-image:url("../assets/vote.png");
+background-color: rgba(234, 234, 234, 1);
 }
 </style>
