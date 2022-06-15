@@ -60,7 +60,7 @@ router.post("/suffrage", async (req, res) => {
 //promise pour récupérer candidat avec id_suffrae
 const getCandidtas = (idSuffrage) => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT Nom_candidat, Prénom_candidat, Description_candidat, Photo_candidat, Lien_programme_candidat FROM candidat WHERE ID_suffrage="+ idSuffrage, async (err, resultRecupCandidats) => {
+        db.query("SELECT ID_candidat, Nom_candidat, Prénom_candidat, Description_candidat, Photo_candidat, Lien_programme_candidat FROM candidat WHERE ID_suffrage="+ idSuffrage, async (err, resultRecupCandidats) => {
             if(err) throw err;
             if(resultRecupCandidats.length < 0){
                 reject({
@@ -117,6 +117,88 @@ router.get('/suffrage/:useremail', async (req, res) => {
             
         }
     })
+});
+
+
+//promise pour vérifier si le votant a déja voté
+const verifierEligibilite = (emailVotant) => {
+    return new Promise((resolve, reject) => {
+        db.query("SELECT vote FROM eligible WHERE Email='" + emailVotant + "'", async (err, res) => {
+            if(err) reject(err);
+            if(res.length <= 0){
+                reject({
+                    code :1,
+                    message:"L'utilisateur n'est pas éligible pour ce vote"
+                })
+            }else{
+                if(res[0].vote != 'non'){
+                    reject({
+                        code: 2,
+                        message: "L'utilisateur a déjà voté !"
+                    })
+                }else{
+                    resolve({
+                        code: 0,
+                        message: "ok"
+                    })
+                }
+                
+            }
+            
+        })
+    })
+}
+
+//promise pour indiquer qu'un votant a voté
+const aVote = (emailVotant) => {
+    return new Promise((resolve, reject) => {
+        db.query("UPDATE eligible SET vote = 'oui' WHERE Email = '" + emailVotant +"'" ,async (err, res) => {
+            if(err) reject(err);
+            resolve({
+                code: 0,
+                message : "A voté !"
+            });
+        } )
+    })
+}
+
+//promise pour augmenté compteur candidat
+const augmenterVoteCandidat = (idCandidat) => {
+    return new Promise ((resolve, reject) => {
+        db.query("UPDATE candidat set Nombre_vote = (Nombre_vote + 1) where ID_candidat =" + idCandidat, function (err, res) {
+            if(err) reject(err);
+            resolve({
+                code: 0,
+                message: "Candidat mis a jour, A voté !"
+            })
+        })
+    })
+}
+
+router.post('/voter/:emailVotant', async (req, res) => {
+    const idCandidat = req.body.ID_candidat;
+    verifierEligibilite(req.params.emailVotant)
+        .then((data) => {
+            aVote(req.params.emailVotant)
+            .then((data) => {
+                augmenterVoteCandidat(idCandidat)
+                    .then((data) => {
+                        res.status(200).json({
+                            code:0,
+                            message:'ok!'
+                        })
+                    })
+                    .catch((err) => {
+                        throw err;
+                    })
+            })
+            .catch((err) => {
+                throw err;
+            })
+        })
+        .catch((probleme) => {
+            res.status(403).json(probleme);
+        })
 })
 
 module.exports = router;

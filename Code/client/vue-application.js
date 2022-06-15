@@ -16,7 +16,11 @@ var app = new Vue({
     router,
     el: '#app',
     data:{
-        listeCandidat: []
+        listeCandidat: [],
+        reponseVoter:{
+            code: -1,
+            message: ''
+        }
     },
     async mounted(){
     },
@@ -26,6 +30,17 @@ var app = new Vue({
                 console.log(response.message)
             })
                 
+        },
+        async voter(data){
+            await axios.post("/api/voter/" + data.votant, data.candidat)
+                .then(rep => {
+                    this.reponseVoter.code = rep.data.code
+                    this.reponseVoter.message = rep.data.message
+                })
+                .catch(rep => {
+                    this.reponseVoter.code = rep.response.data.code
+                    this.reponseVoter.message = rep.response.data.message
+                })
         }
     }
 })

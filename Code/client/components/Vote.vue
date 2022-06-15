@@ -21,6 +21,9 @@
         </form>
     </div>
 
+
+    
+
     <div class="grille-candidats">
         <div class="row row-cols-1 row-cols-md-3 g-4 center">
             <div class="col" v-for="candidat in SuffrageAffiche.candidats" :key="candidat.id">
@@ -29,10 +32,35 @@
                     <div class="card-body">
                         <h5 class="card-title">{{candidat.Nom_candidat}} - {{candidat.Prénom_candidat}}</h5>
                         <p class="card-text">{{candidat.Description_candidat}}</p>
-                        <a href="#" class="btn btn-primary">Voter</a>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#validerVote">
+                            Voter !
+                        </button>
                         <a href="#" class="btn btn-outline-primary">Plus d'info</a>
                     </div>
                 </div>
+            
+
+                <!-- Modal -->
+                <div class="modal fade" id="validerVote" tabindex="-1" role="dialog" aria-labelledby="validerVoteLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="validerVoteLabel">Validation vote</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Voulez-vous valider votre vote pour {{candidat.Nom_candidat}} {{candidat.Prénom_candidat}}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" @click="voter(candidat)">Voter !</button>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -42,7 +70,8 @@
 <script>
 module.exports =  {
      props:{
-        listeCandidat: {type : Array, default: []}
+        listeCandidat: {type : Array, default: []},
+        reponseVoter: {type: Object}
     },
     data(){
 
@@ -53,6 +82,14 @@ module.exports =  {
         }
     },
     methods:{
+        async voter(candidat){
+            const data = {
+                votant: 'email1',
+                candidat: candidat
+            }
+            this.$emit('voter', data)
+            document.getElementById('#validerVote').modal =({show : 'true'});
+        }
 
     },
     async mounted(){
@@ -61,7 +98,6 @@ module.exports =  {
         //this.Suffrage = res.data;
         //console.log(this.Suffrage)
         this.SuffrageAffiche = (await axios.get('/api/suffrage/email1')).data;
-        console.log(this.SuffrageAffiche)
     },
     components:{
         
