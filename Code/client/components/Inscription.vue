@@ -1,8 +1,8 @@
 <template>
-<div class="container row">
+<div class="container row div-page-inscription">
 
-<div id="image-fond" class="col col-md-15"></div>
-<div class="col col-md-5">
+<div id="image-fond" class="col-md-6 col-lg-6"></div>
+<div class="col-md-6 col-lg-6">
 
 <form id="form-connexion" >
   <h1 style="color:#E30000;">INSCRIPTION</h1>
@@ -102,12 +102,19 @@ h2 {
 
 
 #image-fond {
-height: 750px;
+background-image:url("../assets/vote.png");
+background-color: rgba(234, 234, 234, 1);
+background-repeat: no-repeat;
+background-size: contain;
 margin-left: -25px;
 margin-right: auto;
 max-width: 900%;
 
-background-image:url("../assets/vote.png");
-background-color: rgba(234, 234, 234, 1);
+}
+
+.div-page-inscription{
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
