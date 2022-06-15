@@ -1,9 +1,11 @@
 const Accueil = window.httpVueLoader("./components/Accueil.vue")
 const AjouterVote = window.httpVueLoader("./components/AjouterVote.vue")
+const Vote = window.httpVueLoader("./components/Vote.vue")
 
 const routes =[
-    {path : '/', component: AjouterVote},
-    {path: '/test', component: Accueil}
+    {path : '/', component: Accueil},
+    {path: '/AjouterVote', component: AjouterVote},
+    {path: '/vote', component: Vote}
 ]
 
 const router = new VueRouter({
@@ -17,8 +19,6 @@ var app = new Vue({
         listeCandidat: []
     },
     async mounted(){
-        const res = await axios.get('/api/candidats');
-        this.listeCandidat = res.data;
     },
     methods:{
         async ajouterSuffrage(data){
