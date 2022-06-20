@@ -3,6 +3,7 @@ const router = express.Router();
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 
+
 const Suffrage = require('../data/Suffrage');
 
 
@@ -29,10 +30,10 @@ router.post("/suffrage", async (req, res) => {
     const descriptionSuffrage = req.body.description;
     const datFin = req.body.dateFin;
     const candidatsSuffrage = req.body.candidats;
-    const votantsSuffrage = req.body.votants;
+    const heureFin = req.body.heureFin;
 
     //on va d'abord ajouter les infos du suffrage pour récupérer son id
-    db.query("INSERT INTO suffrage (Nom_suffrage, Description_suffrage, Date_fin_suffrage) values ('" + nomSuffrage + "','" + descriptionSuffrage +"','" + datFin +"')", async (err, result) => {
+    db.query("INSERT INTO suffrage (Nom_suffrage, Description_suffrage, Date_fin_suffrage, Heure_fin_suffrage) values ('" + nomSuffrage + "','" + descriptionSuffrage +"','" + datFin + "','" + heureFin + "')", async (err, result) => {
         if(err) throw err;
         //on récupère l'id de ce suffrage pour y insérer les candidats et votants
         db.query("SELECT ID_suffrage FROM suffrage WHERE Nom_suffrage='"+nomSuffrage+"' AND Description_suffrage='"+descriptionSuffrage +"'", async(err, resultRecupID) => {
@@ -40,14 +41,7 @@ router.post("/suffrage", async (req, res) => {
             const idSuffrage = resultRecupID[0].ID_suffrage;
             //insertion des candidats
             for(let candidat of candidatsSuffrage){
-                db.query("INSERT INTO candidat (ID_suffrage, Nom_candidat,Prénom_candidat,Description_candidat,Photo_candidat) values (" + idSuffrage + ", '"+candidat.nom+"','"+candidat.prenom+"','"+candidat.description+"','"+candidat.photo+"')", async (err, resultPostCandidat) => {
-                    if(err) throw err;
-                })
-            }
-            //insertion des votants
-            for(let votant of votantsSuffrage){
-                db.query("INSERT INTO eligible (ID_suffrage, Email) values ("+ idSuffrage +",'" +  votant
-                +"')", async (err, resultPostVotants) => {
+                db.query("INSERT INTO candidat (ID_suffrage, Nom_candidat,Prénom_candidat,Description_candidat,Photo_candidat, Programme_candidat) values (" + idSuffrage + ", '"+candidat.nom+"','"+candidat.prenom+"','"+candidat.description+"','"+candidat.photo+ "', '" + candidat.programme +"')", async (err, resultPostCandidat) => {
                     if(err) throw err;
                 })
             }
@@ -60,7 +54,7 @@ router.post("/suffrage", async (req, res) => {
 //promise pour récupérer candidat avec id_suffrae
 const getCandidtas = (idSuffrage) => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT ID_candidat, Nom_candidat, Prénom_candidat, Description_candidat, Photo_candidat, Lien_programme_candidat FROM candidat WHERE ID_suffrage="+ idSuffrage, async (err, resultRecupCandidats) => {
+        db.query("SELECT ID_candidat, Nom_candidat, Prénom_candidat, Description_candidat, Photo_candidat, Programme_candidat FROM candidat WHERE ID_suffrage="+ idSuffrage, async (err, resultRecupCandidats) => {
             if(err) throw err;
             if(resultRecupCandidats.length < 0){
                 reject({
@@ -77,20 +71,20 @@ const getCandidtas = (idSuffrage) => {
 //promise pour récupérer nombre de votants avec id_suffrage
 const getNombreVotants = (idSuffrage) => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT count(*) FROM eligible WHERE ID_suffrage = " + idSuffrage, async (err, resultRecupVotantsLength) => {
+        db.query("SELECT count(*) FROM utilisateur " , async (err, resultRecupVotantsLength) => {
                 
             resolve(resultRecupVotantsLength[0]["count(*)"]);
         })
     })
 }
 
-//route pour récupérer les suffrages qui concernent l'ustilisateur connecté.
-router.get('/suffrage/:useremail', async (req, res) => {
+//route pour récupérer le suffrage qui concernent l'ustilisateur connecté.
+router.get('/suffrage/:CNI', async (req, res) => {
     //on récupère les info des suffrage qui corresponde à l'user
-    db.query("SELECT * FROM suffrage s INNER JOIN eligible e ON e.ID_suffrage = s.ID_suffrage WHERE e.Email ='" + req.params.useremail +"'", async (err, resultRecupSuffrage) => {
+    db.query("SELECT * FROM suffrage ", async (err, resultRecupSuffrage) => {
         if(err) throw err;
         //on regarde si il y a au moins un suffrage
-        if(resultRecupSuffrage.length < 0){
+        if(resultRecupSuffrage.length <= 0){
             res.status(204).json({message : "L'utilisateur n'est éligible à aucun vote..."})
         }else{
             
@@ -99,6 +93,7 @@ router.get('/suffrage/:useremail', async (req, res) => {
                 nom_suffrage: resultRecupSuffrage[0].Nom_suffrage,
                 description_suffrage: resultRecupSuffrage[0].Description_suffrage,
                 date_fin_suffrage: resultRecupSuffrage[0].Date_fin_suffrage,
+                heure_fin_suffrage: resultRecupSuffrage[0].Heure_fin_suffrage,
                 candidats : [],
                 nombre_Votants : 0
             }
@@ -110,10 +105,9 @@ router.get('/suffrage/:useremail', async (req, res) => {
                     getNombreVotants(idSuffrage)
                         .then((response) => {
                             suffrage.nombre_Votants = response;
-                            console.log("envoit rep")
                             res.status(200).json(suffrage)
-                        })
                 })
+            })
             
         }
     })
@@ -200,5 +194,8 @@ router.post('/voter/:emailVotant', async (req, res) => {
             res.status(403).json(probleme);
         })
 })
+
+
+
 
 module.exports = router;

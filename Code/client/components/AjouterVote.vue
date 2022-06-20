@@ -3,7 +3,6 @@
          <ul class="checkout-bar">
             <li class="active"><a href="#get-started" data-toggle="tab">Informations Vote</a></li>
             <li class=""><a href="#about-you" data-toggle="tab">Candidats</a></li>
-            <li class=""><a href="#looking-for" data-toggle="tab">Participants</a></li>
             <li class=""><a href="#">Validation</a></li>
         </ul>
 
@@ -29,6 +28,10 @@
                         <label for="dateFinVoteInput" class="form-label">Description</label>
                         <input type="date" id="dateFinVoteInput" class="form-control" v-model="suffrage.dateFin" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="timeFinVoteInput" class="form-labe">Heure de fin</label>
+                        <input type="time" id="heureFinVoteInput" class="form-control" v-model="suffrage.heureFin" required>
+                    </div>
                     <button type="submit" v-if="validation === false "  class="btn btn-primary col-md-6 offset-md-3">Suivant</button>
                     <button type="button" @click="enregistreModificationsSuffrage" v-if="validation === true "  class="btn btn-primary col-md-6 offset-md-3">Enregistrer</button>
 
@@ -41,7 +44,8 @@
             <div class="card-body col-md-8 offset-md-2">
                 <h5 class="card-title">{{suffrage.nom}}</h5>
                 <p class="card-text">{{suffrage.description}}</p>
-                <p class="card-text">{{suffrage.dateFin}}</p>
+                <p class="card-text">Date de fin : {{suffrage.dateFin}}</p>
+                <p class="card-text">Heure de fin : {{suffrage.heureFin}}</p>
                 <button type="button" @click="modifierSuffrage" class="btn btn-dessous btn-primary">Modifier</button>
             </div>
         </div>
@@ -49,6 +53,7 @@
 
         <div class="en-tete-candidats" v-if="validation === true">
             <h2>Candidats :</h2>
+            <br/>
         </div>
 
         <!--Div ajout de candidats-->
@@ -64,8 +69,12 @@
                         <input type="text" class="form-control" id="prenomCandidatInput" v-model="ajoutCandidat.prenom" required>
                     </div>
                     <div class="mb-3">
-                        <label for="imageCandidatInput" class="form-label">Photo du candidat</label>
-                        <input type="text" class="form-control" id="imageCandidatInput" v-model="ajoutCandidat.photo" required>
+                        <label for="imageCandidatInput" class="form-label">Photo du candidat :</label> <br/>
+                        <input type="file" id="imageCandidatInput" @change="uploadFile" required>                    
+                    </div>
+                    <div class="mb-3">
+                        <label for="programmeCandidatInput" class="form-label">Programme du candidat :</label><br/>
+                        <input type="file" id="programmeCandidatInput" @change="uploadProgramme" required>                    
                     </div>
                     <div class="mb-3">
                         <label for="descriptionCandidatInput" class="form-label">Description</label>
@@ -73,10 +82,10 @@
                     </div>
                     <div v-if="this.editCandidat === false && afficherFormulaireCandidat === false">
                         <div class="btn-form">
-                            <button type="button" @click="passerEtape3"  class="btn btn-primary col-md-6 offset-md-3">Enregistrer et Suivant</button>                    
-                            <button type="submit"  class="btn btn-outline-primary col-md-6 offset-md-3">Ajouter un Candidat</button>
+                            <button type="submit"  class="btn btn-outline-primary col-md-6 offset-md-3">Enregistrer</button>
+                            <button type="button" @click="avancerEtape" class="btn btn-primary col-md-6 offset-md-3 ">Suivant </button>
                         </div>
-                        <button type="button" @click="avancerEtape" class="btn btn-primary col-md-6 offset-md-3 btn-dessous">Suivant sans enregistrer</button>
+                        
                     </div>
                     <div v-if="this.editCandidat === true || afficherFormulaireCandidat === true">
                         <button type="button" @click="candidatSupplementaire" class="btn btn-primary col-md-6 offset-md-3 btn-dessous">Enregistrer</button>
@@ -108,41 +117,6 @@
             </div>
         </div>
 
-
-        <div class="en-tete-votants" v-if="validation === true">
-            <h2>Votants :</h2>
-        </div>
-
-        <!--Div ajout de votant-->
-        <div class="row" v-if="etape === 3 || afficherFormulaireVotant === true">
-            <div class="formulaireVote col-md-6 offset-md-3" >
-                <form @submit.prevent="votantSupplementaire">
-                    <div class="mb-3">
-                        <label for="emailVotantInput" class="form-label">Email du votant</label>
-                        <input type="text" class="form-control" id="emailVotantInput" v-model="ajoutParticipant" required>
-                    </div>
-                    
-                    <div v-if="this.afficherFormulaireVotant === false">
-                        <div class="btn-form">
-                            <button type="button" @click="passerEtape4"  class="btn btn-primary col-md-6 offset-md-3">Enregistrer et Suivant</button>                    
-                            <button type="submit"  class="btn btn-outline-primary col-md-6 offset-md-3">Ajouter un Votant</button>
-                        </div>
-                        <button type="button" @click="avancerEtape"  class="btn btn-primary col-md-6 offset-md-3 btn-dessous">Suivant sans enregistrer</button>
-                    </div>
-                    <div v-if="this.afficherFormulaireVotant === true">
-                        <button type="button" @click="votantSupplementaire" class=" btn btn-primary col-md-6 offset-md-3 btn-dessous">Enregistrer</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div  v-if="etape === 3 || validation === true" class="list-email-participants">
-            <ul class="list-group ">
-                <li class="list-group-item" v-for="participant in ajoutParticipants" :key="participant">{{participant}}  <button type="button" @click="supprimerParticipant(participant)" class="btn-close btn-email-participant" aria-label="Close"></button></li>
-            </ul>
-            <button type="button" @click="formulaireAjouterVotant" class="btn btn-dessous btn-primary" v-if="validation === true && afficherFormulaireVotant === false">Ajouter Votant</button>
-        </div>
-
         <div class="btn-validation-suffrage">
             <button type="button" @click="validerSuffrage" class="btn btn-lg btn-dessous btn-primary" v-if="validation === true">Valider le suffrage</button>
         </div>
@@ -151,7 +125,12 @@
 </template>
 
 <script>
+
 module.exports = {
+    name : 'AjouterVote',
+    
+    components:{
+    },
 props:{
 
     },
@@ -162,9 +141,11 @@ props:{
                 nom:'',
                 description:'',
                 dateFin: Date.now(),
-                candidats:[],
-                votants:[]
+                heureFin: Date.now(),
+                candidats:[]
             },
+            files:null,
+            programme:null,
             ajoutParticipant: '',
             ajoutParticipants: [],
             ajoutCandidats:[],
@@ -177,14 +158,18 @@ props:{
             },
             etape: 1,
             editCandidat: false,
-            editVotant: false,
             validation:false,
-            afficherFormulaireVotant: false,
             afficherFormulaireCandidat: false,
             editerSuffrage: false
         }
     },
     methods:{
+        uploadFile (event) {
+            this.files = event.target.files
+        },
+        uploadProgramme (event) {
+            this.programme = event.target.files
+        },
         validerSuffrage(){
             this.suffrage.candidats = this.ajoutCandidats;
             this.suffrage.votants = this.ajoutParticipants;
@@ -192,30 +177,37 @@ props:{
             this.$emit('ajouter-suffrage', this.suffrage)
             this.$router.push('/Accueil');
         },
-        votantSupplementaire(){
-            if(this.ajoutParticipant === ''){
-
-            }else{
-                this.ajoutParticipants.push(this.ajoutParticipant);
-                this.ajoutParticipant= '';
-            }
-            this.editVotant = false;
-            this.afficherFormulaireVotant = false;
-        },
         ajouterCandidat(){
             this.afficherFormulaireCandidat = true;
         },
-        candidatSupplementaire(){
+        async candidatSupplementaire(){
             if(this.ajoutCandidat.nom === ''){
 
             }else{
-                this.ajoutCandidats.push(this.ajoutCandidat);
-                this.ajoutCandidat = {
-                    nom:'',
-                    prenom:'',
-                    photo:'',
-                    progamme:'',
-                };
+                const formData = new FormData();
+                formData.append('file', this.files[0])
+          
+                await axios.post('/apiFile/file-upload', formData, {
+                }).then(async(rep) => {
+                    this.ajoutCandidat.photo = rep.data.fileURI;
+                    const formData  = new FormData();
+                    formData.append('file', this.programme[0])
+                    await axios.post('/apiFile/file-upload', formData, {
+                    })
+                    .then(repProgramme => {
+                        this.ajoutCandidat.progamme = repProgramme.data.fileURI
+                        this.ajoutCandidats.push(this.ajoutCandidat);
+                        this.ajoutCandidat = {
+                            nom:'',
+                            prenom:'',
+                            photo:'',
+                            progamme:'',
+                            description: '',
+                        };
+                    })
+                    
+                })
+                
             }
             this.editCandidat = false;
             this.afficherFormulaireCandidat =false;
@@ -227,15 +219,9 @@ props:{
             this.candidatSupplementaire();
             this.avancerEtape();
         },
-        passerEtape4(){
-            this.votantSupplementaire()
-            this.avancerEtape();
-        },
         avancerEtape(){
             this.editCandidat = false;
-            this.editVotant = false;
-            this.afficherFormulaireVotant = false;
-            if(this.etape < 3) {
+            if(this.etape < 2) {
                 var listeUL = document.getElementsByClassName('checkout-bar')
                 var curr = listeUL[0].getElementsByClassName('active')[0]
                 listeUL[0].getElementsByClassName('active')[0].classList.add("visited")
@@ -243,7 +229,7 @@ props:{
                 curr.nextElementSibling.classList.add('active');
                 this.etape ++;
             }else{
-                if(this.etape == 3){
+                if(this.etape == 2){
                     var listeUL = document.getElementsByClassName('checkout-bar')
                     var curr = listeUL[0].getElementsByClassName('active')[0]
                     listeUL[0].getElementsByClassName('active')[0].classList.add("visited")
@@ -275,9 +261,6 @@ props:{
             var index = this.ajoutParticipants.indexOf(participant);
             this.ajoutParticipants.splice(index, 1);
         },
-        formulaireAjouterVotant(){
-            this.afficherFormulaireVotant = true;
-        },
         modifierSuffrage(){
             this.editerSuffrage = true;
         }
@@ -285,9 +268,6 @@ props:{
     },
     async mounted(){
         console.log(this.listeCandidat)
-    },
-    components:{
-        
     }
 }
 </script>
@@ -316,7 +296,7 @@ ul.checkout-bar li {
     margin: 50px auto;
     padding: 0;
     text-align: center;
-    width: 22.5%;
+    width: 33%;
 }
 ul.checkout-bar li:before {
     -webkit-box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
@@ -394,7 +374,7 @@ ul.checkout-bar li.visited a {
     content:"";
     height: 15px;
     width: 50%;
-    left: 50%;
+    left: 45%;
     position: absolute;
     top: -50px;
     z-index: 0;
@@ -436,7 +416,7 @@ ul.checkout-bar li.visited:after {
     box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
     content:"";
     height: 15px;
-    left: 50%;
+    left: 45%;
     position: absolute;
     top: -50px;
     width: 100%;

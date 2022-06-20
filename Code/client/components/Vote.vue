@@ -7,6 +7,10 @@
     <div class="presentation-suffrage">
         <h1>{{SuffrageAffiche.nom_suffrage}}</h1>
         <h3>{{SuffrageAffiche.description_suffrage}}</h3>
+        
+        <br/>
+        <h3>Date de fin : {{SuffrageAffiche.date_fin_suffrage.split('T')[0]}}</h3>
+        <h3>Heure de fin : {{SuffrageAffiche.heure_fin_suffrage}}</h3>
         <br/>
         <h4>Nombre de participants : {{SuffrageAffiche.nombre_Votants}}</h4>
     </div>
@@ -35,7 +39,7 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#validerVote">
                             Voter !
                         </button>
-                        <a href="#" class="btn btn-outline-primary">Plus d'info</a>
+                        <a :href="candidat.Programme_candidat" class="btn btn-outline-primary">Plus d'info</a>
                     </div>
                 </div>
             
@@ -88,7 +92,7 @@ module.exports =  {
                 candidat: candidat
             }
             this.$emit('voter', data)
-            document.getElementById('#validerVote').modal =({show : 'true'});
+            //reste a rediriger sur page d'acceuil et indiquer que le vote a été pris en compte
         }
 
     },
