@@ -1,6 +1,5 @@
 const express = require('express');
 const routerFile = express.Router();
-const mongoose = require('mongoose');
 const path = require("path");
 
 const DIR = '../public';
@@ -20,22 +19,13 @@ const MIME_TYPE= {
 var storage = multer.diskStorage({
     //destination stockage fichier
     destination: (req, file, cb) => {
-        console.log('....1...')
         cb (null, '../code/server/files')
     },
     filename: (req, file, cb) => {
         //supprimer les espaces
-        console.log('...1...');
         const name  = file.originalname.split(" ").join("_")
-        
-        console.log('...2...');
         const extension = MIME_TYPE[file.mimetype];
-        
-        console.log('...3...');
-
         cb(null , name + "_" + Date.now() + "." + extension);
-        
-        console.log('...4...');
     }
 })
 
@@ -46,9 +36,7 @@ const upload = multer({ storage: storage, limits: { fieldSize: 10 * 1024 * 1024 
 
 
 //poster fichier
-routerFile.post('/file-upload', upload.single('file'), async (req, res, next) => {
-        console.log(req.file);
-        
+routerFile.post('/file-upload', upload.single('file'), async (req, res, next) => {        
         const url = req.protocol + '://' + req.get('host')
         const reqFiles =  url + "/files/" + req.file.filename 
         

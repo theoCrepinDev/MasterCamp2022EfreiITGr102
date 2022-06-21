@@ -154,7 +154,7 @@ props:{
                 prenom:'',
                 photo:'',
                 description:'',
-                progamme:''
+                programme:''
             },
             etape: 1,
             editCandidat: false,
@@ -195,13 +195,13 @@ props:{
                     await axios.post('/apiFile/file-upload', formData, {
                     })
                     .then(repProgramme => {
-                        this.ajoutCandidat.progamme = repProgramme.data.fileURI
+                        this.ajoutCandidat.programme = repProgramme.data.fileURI
                         this.ajoutCandidats.push(this.ajoutCandidat);
                         this.ajoutCandidat = {
                             nom:'',
                             prenom:'',
                             photo:'',
-                            progamme:'',
+                            programme:'',
                             description: '',
                         };
                     })

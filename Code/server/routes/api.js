@@ -115,17 +115,17 @@ router.get('/suffrage/:CNI', async (req, res) => {
 
 
 //promise pour vérifier si le votant a déja voté
-const verifierEligibilite = (emailVotant) => {
+const verifierEligibilite = (CNI) => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT vote FROM eligible WHERE Email='" + emailVotant + "'", async (err, res) => {
+        db.query("SELECT ID_candidat FROM utilisateur WHERE No_CNI='" + CNI + "'", async (err, res) => {
             if(err) reject(err);
             if(res.length <= 0){
                 reject({
                     code :1,
-                    message:"L'utilisateur n'est pas éligible pour ce vote"
+                    message:"L'utilisateur n'est pas dans la base de donnée"
                 })
             }else{
-                if(res[0].vote != 'non'){
+                if(res[0].ID_candidat != 0){
                     reject({
                         code: 2,
                         message: "L'utilisateur a déjà voté !"
@@ -144,9 +144,9 @@ const verifierEligibilite = (emailVotant) => {
 }
 
 //promise pour indiquer qu'un votant a voté
-const aVote = (emailVotant) => {
+const aVote = (CNI, idCandidat) => {
     return new Promise((resolve, reject) => {
-        db.query("UPDATE eligible SET vote = 'oui' WHERE Email = '" + emailVotant +"'" ,async (err, res) => {
+        db.query("UPDATE utilisateur SET ID_candidat =" + idCandidat + " WHERE No_CNI = '" + CNI +"'" ,async (err, res) => {
             if(err) reject(err);
             resolve({
                 code: 0,
@@ -169,29 +169,37 @@ const augmenterVoteCandidat = (idCandidat) => {
     })
 }
 
-router.post('/voter/:emailVotant', async (req, res) => {
+router.post('/voter/:CNI', async (req, res) => {
     const idCandidat = req.body.ID_candidat;
-    verifierEligibilite(req.params.emailVotant)
+    verifierEligibilite(req.params.CNI)
         .then((data) => {
-            aVote(req.params.emailVotant)
+            aVote(req.params.CNI, idCandidat)
             .then((data) => {
                 augmenterVoteCandidat(idCandidat)
                     .then((data) => {
-                        res.status(200).json({
+                        res.status(201).json({
                             code:0,
                             message:'ok!'
                         })
                     })
                     .catch((err) => {
+                        res.status(200).json({
+                            code:3,
+                            message:'Erreur maj nombre vote candidat'
+                        })
                         throw err;
                     })
             })
             .catch((err) => {
+                res.status(200).json({
+                    code:2,
+                    message:'Utilisateur a deja voté'
+                })
                 throw err;
             })
         })
         .catch((probleme) => {
-            res.status(403).json(probleme);
+            res.status(200).json(probleme);
         })
 })
 

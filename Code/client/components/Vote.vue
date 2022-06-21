@@ -88,10 +88,18 @@ module.exports =  {
     methods:{
         async voter(candidat){
             const data = {
-                votant: 'email1',
+                votant: '1',
                 candidat: candidat
             }
-            this.$emit('voter', data)
+            await axios.post("/api/voter/" + data.votant, data.candidat)
+                .then(rep => {
+                    console.log("then")
+                    console.log(rep)
+                })
+                .catch(rep => {
+                    console.log("catch")
+                    console.log(rep)
+                })
             //reste a rediriger sur page d'acceuil et indiquer que le vote a été pris en compte
         }
 
