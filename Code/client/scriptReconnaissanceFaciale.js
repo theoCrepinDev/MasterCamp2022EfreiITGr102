@@ -1,5 +1,4 @@
 
-
 let imageUpload = document.getElementById('imageUpload')
 
 Promise.all([

@@ -1,9 +1,10 @@
 const Accueil = window.httpVueLoader("./components/Accueil.vue")
 const AjouterVote = window.httpVueLoader("./components/AjouterVote.vue")
 const Vote = window.httpVueLoader("./components/Vote.vue")
+const ReconaissanceFaciale = window.httpVueLoader("./components/ReconaissanceFaciale.vue")
 
 const routes =[
-    {path : '/', component: Accueil},
+    {path : '/', component: ReconaissanceFaciale},
     {path: '/AjouterVote', component: AjouterVote},
     {path: '/vote', component: Vote}
 ]

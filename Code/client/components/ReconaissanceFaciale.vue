@@ -11,6 +11,7 @@
 module.exports = {
     mounted(){
         let recaptchaScript = document.createElement('script') 
+        recaptchaScript.setAttribute('type', 'module')
         recaptchaScript.setAttribute('src', 'scriptReconnaissanceFaciale.js') 
         document.head.appendChild(recaptchaScript)
 
