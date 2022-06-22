@@ -1,5 +1,6 @@
 <template>
 <div>
+<div v-if="verification === false">
     <div class="titre-presentation-suffrage ">
         <h2>Suffrage :</h2>
     </div>
@@ -69,27 +70,55 @@
         </div>
     </div>
 </div>
+<div v-else>
+    <prise-photo 
+        v-bind:choix-candidat="candidatChoisit"
+        v-bind:cni-user="userConnected.CNI"
+    ></prise-photo>
+</div>
+</div>
 </template>
 
 <script>
 module.exports =  {
      props:{
         listeCandidat: {type : Array, default: []},
-        reponseVoter: {type: Object}
+        reponseVoter: {type: Object},
+        userConnected: {type: Object}
+        
     },
     data(){
 
         return{
-            test : 'data test',
             Suffrage:[],
-            SuffrageAffiche: {}
+            SuffrageAffiche: {},
+            verification : false,
+            candidatChoisit: null
         }
     },
     methods:{
         async voter(candidat){
+            this.verification = true
+            this.candidatChoisit = candidat
+            // const data = {
+            //     votant: '1',
+            //     candidat: candidat
+            // }
+            // await axios.post("/api/voter/" + data.votant, data.candidat)
+            //     .then(rep => {
+            //         console.log("then")
+            //         console.log(rep)
+            //     })
+            //     .catch(rep => {
+            //         console.log("catch")
+            //         console.log(rep)
+            //     })
+            //reste a rediriger sur page d'acceuil et indiquer que le vote a été pris en compte
+        },
+        async validerVote(){
             const data = {
                 votant: '1',
-                candidat: candidat
+                candidat: this.choixCandidat
             }
             await axios.post("/api/voter/" + data.votant, data.candidat)
                 .then(rep => {
@@ -100,7 +129,6 @@ module.exports =  {
                     console.log("catch")
                     console.log(rep)
                 })
-            //reste a rediriger sur page d'acceuil et indiquer que le vote a été pris en compte
         }
 
     },
@@ -112,7 +140,7 @@ module.exports =  {
         this.SuffrageAffiche = (await axios.get('/api/suffrage/email1')).data;
     },
     components:{
-        
+        PrisePhoto
     }
 
 }

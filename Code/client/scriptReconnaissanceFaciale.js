@@ -1,10 +1,9 @@
-
 let imageUpload = document.getElementById('imageUpload')
 
 Promise.all([
-  faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
-  faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-  faceapi.nets.ssdMobilenetv1.loadFromUri('/models')
+  faceapi.nets.faceRecognitionNet.loadFromUri('/files/models'),
+  faceapi.nets.faceLandmark68Net.loadFromUri('/files/models'),
+  faceapi.nets.ssdMobilenetv1.loadFromUri('/files/models')
 ]).then(start)
 
 async function start() {
@@ -18,9 +17,10 @@ async function start() {
   let image
   let canvas
   console.log('Module Prêt')
-  imageUpload.addEventListener('change', async () => {
-    if (image) image.remove()
-    image = await faceapi.bufferToImage(imageUpload.files[0])
+  // imageUpload.addEventListener('change', async () => {
+    image = document.getElementById('imgPrise')
+    console.log('img to biffer')
+    console.log(image)
     canvas = faceapi.createCanvasFromMedia(image)
     let displaySize = { width: image.width, height: image.height }
     faceapi.matchDimensions(canvas, displaySize)
@@ -29,8 +29,20 @@ async function start() {
     let results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
     results.forEach((result, i) => {
       console.log('Utilisateur reconnu : ' + result.label)
+      if(verifUserWithRecognitionResult(result.label)){
+        let btnValide = document.getElementById('btnValiderVote')
+        btnValide.style.display = ''
+      }
     })
-  })
+  // })
+}
+
+
+
+function verifUserWithRecognitionResult(result){
+  let userCNI= document.getElementById('CNIUserConnected').innerText
+  console.log(result === userCNI)
+  return (result === userCNI);
 }
 
 function loadLabeledImages() {
@@ -39,7 +51,7 @@ function loadLabeledImages() {
     labels.map(async label => {
       let descriptions = []
       for (let i = 1; i <= 2; i++) {
-        let img = await faceapi.fetchImage(`/labeled_images/${label}${i}.jpg`)
+        let img = await faceapi.fetchImage(`/files/labeled_images/${label}${i}.jpg`)
         let detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
         descriptions.push(detections.descriptor)
       }

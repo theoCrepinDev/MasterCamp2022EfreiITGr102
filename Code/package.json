@@ -28,6 +28,7 @@
     "nodemon": "^2.0.16",
     "pg": "^8.7.3",
     "route": "^0.2.5",
-    "sequelize": "^6.19.0"
+    "sequelize": "^6.19.0",
+    "webcam-easy": "^1.0.5"
   }
 }

@@ -2,11 +2,13 @@ const Accueil = window.httpVueLoader("./components/Accueil.vue")
 const AjouterVote = window.httpVueLoader("./components/AjouterVote.vue")
 const Vote = window.httpVueLoader("./components/Vote.vue")
 const ReconaissanceFaciale = window.httpVueLoader("./components/ReconaissanceFaciale.vue")
+const PrisePhoto = window.httpVueLoader("./components/PrisePhoto.vue");
 
 const routes =[
-    {path : '/', component: ReconaissanceFaciale},
+    {path : '/validationVoteIdentite', component: PrisePhoto},
     {path: '/AjouterVote', component: AjouterVote},
-    {path: '/vote', component: Vote}
+    {path: '/vote', component: Vote},
+    {path : '/ReconnaissanceFaciale', component: ReconaissanceFaciale}
 ]
 
 const router = new VueRouter({
@@ -17,11 +19,15 @@ var app = new Vue({
     router,
     el: '#app',
     data:{
+        userConnected: {
+            CNI : 'Theo'
+        },
         listeCandidat: [],
         reponseVoter:{
             code: -1,
             message: ''
-        }
+        },
+        picturelink:''
     },
     async mounted(){
     },
@@ -42,6 +48,12 @@ var app = new Vue({
                     this.reponseVoter.code = rep.response.data.code
                     this.reponseVoter.message = rep.response.data.message
                 })
+        },
+        pictureTaken(data){
+            this.picturelink = data
+        },
+        test(){
+            console.log('mika ma salope')
         }
     }
 })
