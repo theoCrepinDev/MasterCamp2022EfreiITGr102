@@ -36,10 +36,9 @@ const upload = multer({ storage: storage, limits: { fieldSize: 10 * 1024 * 1024 
 
 
 //poster fichier
-routerFile.post('/file-upload', upload.single('file'), async (req, res, next) => {        
+routerFile.post('/file-upload', upload.single('file'), async (req, res, next) => {            
         const url = req.protocol + '://' + req.get('host')
         const reqFiles =  url + "/files/" + req.file.filename 
-        
         res.status(200).json({
             message: "Fichier upload avec succé",
             fileURI : reqFiles

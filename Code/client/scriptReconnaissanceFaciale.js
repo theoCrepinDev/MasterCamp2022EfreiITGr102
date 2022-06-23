@@ -1,3 +1,13 @@
+var labels = []
+
+await axios.get('/api/CNI').then(response => {
+  console.log(response.data)
+  console.log(response)
+  for(let i = 0; i < response.data.length; i++){
+    labels.push('' + response.data[i].No_CNI + '')
+  }
+})
+
 let imageUpload = document.getElementById('imageUpload')
 let imageDiv = document.getElementById('imgPrise')
 
@@ -45,7 +55,7 @@ function verifUserWithRecognitionResult(result){
 }
 
 function loadLabeledImages() {
-  let labels = ['Thor', 'Theo']
+  
   return Promise.all(
     labels.map(async label => {
       let descriptions = []

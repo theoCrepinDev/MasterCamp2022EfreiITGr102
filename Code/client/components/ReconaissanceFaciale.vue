@@ -1,12 +1,14 @@
 <template>
     <div id="reconnaissanceFaiciale" class="container center">
-        <p>Vérification identité de <span id="CNIUserConnected">{{cniUser}}</span> pour valider le vote pour le candidat : <span id="IDCandidatChoisit">{{choixCandidat.ID_candidat}}</span></p>
+        <p v-if="etapeVote === true">Vérification identité de <span id="CNIUserConnected">{{cniUser}}</span> pour valider le vote pour le candidat : <span id="IDCandidatChoisit">{{choixCandidat.ID_candidat}}</span></p>
+        <p v-else>Vérification identité de <span id="CNIUserConnected">{{cniUser}}</span> pour valider l'inscription</p>
         <p>Si vous n'êtes pas redirigé d'ici 20 secondes cela signifie que la photo est mal prise....</p>
         <p>Cliquer ici pour recommencer : <router-link to="/Vote"> ici </router-link></p>
         <p>Si votre identité est confirmée, un bouton 'Valider le vote' apparaitera.</p>
         <div id="photo-btn">        
             <img :src="photoPrise" id="imgPrise">
-            <button type="button" @click="validerVote" class="btn btn-outline-primary" style="display:none" id="btnValiderVote">Valider le vote</button>
+            <button type="button" @click="validerVote" class="btn btn-outline-primary" style="display:none" id="btnValiderVote" v-if="etapeVote === true">Valider le vote</button>
+            <button type="button" @click="validerInscription" class="btn btn-outline-primary" style="display:none" id="btnValiderVote" v-if="etapeEnregistrement === true">Valider l'inscription</button>
         </div>
 
 
@@ -21,7 +23,11 @@ module.exports = {
         photoPrise: {type: String},
         userConnected: {type: Object},
         cniUser: {type: String},
-        choixCandidat:{type: Object}
+        choixCandidat:{type: Object},
+        etapeVote: {type: Boolean},
+        etapeEnregistrement: {type: Boolean},
+        userInformations: {type: Object},
+
 
     },
     data(){
@@ -30,7 +36,7 @@ module.exports = {
         }
     },
     async mounted(){
-        console.log(this.choixCandidat)
+        console.log(this.cniUser)
         let recaptchaScript = document.createElement('script') 
         recaptchaScript.setAttribute('type', 'module')
         recaptchaScript.setAttribute('src', 'scriptReconnaissanceFaciale.js') 
@@ -63,6 +69,10 @@ module.exports = {
                     console.log(rep)
                     this.$router.push('/')
                 })
+        },
+        validerInscription() {
+            console.log('Envoit des infos user')
+            console.log(this.userInformations)
         }
     }
 }

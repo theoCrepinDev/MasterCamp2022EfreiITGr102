@@ -76,6 +76,8 @@
     <prise-photo 
         v-bind:choix-candidat="candidatChoisit"
         v-bind:cni-user="userConnected.CNI"
+        v-bind:etape-vote="true"
+        v-bind:etape-enregistrement="false"
     ></prise-photo>
 </div>
 </div>

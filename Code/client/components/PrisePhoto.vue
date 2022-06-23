@@ -3,7 +3,8 @@
       <div v-if="prisePhoto === true" class="container">
         <div>
           <p>Veuillez autoriser le site à accéder à votre webcam.</p>
-          <p>Regardez votre webcam dans une pièce éclairée et prenez une photo en cliqunt sur 'take a picture' lorsque l'image est nette.</p>
+          <p v-if="etapeVote === true">Regardez votre webcam dans une pièce éclairée et prenez une photo en cliqunt sur 'take a picture' lorsque l'image est nette.</p>
+          <p v-else-if="etapeEnregistrement === true">Présentez votre CNI devant votre webcam dans une pièce éclairée et prenez une photo en cliqunt sur 'take a picture' lorsque l'image est nette.</p>
         </div>
 
         <div class="webcam">
@@ -25,15 +26,25 @@
         </div>
       </div>
 
-      <div v-else>
+      <div v-else-if="etapeVote === true">
         <reconaissance-faciale 
           v-bind:choix-candidat="choixCandidat"
           v-bind:photo-prise="picture"
           v-bind:cni-user="cniUser"
+          v-bind:etape-vote="true"
+          v-bind:etape-enregistrement="false"
         ></reconaissance-faciale>
       </div>
-    
-    
+
+      <div v-else-if="etapeEnregistrement === true">
+        <reconaissance-faciale  
+          v-bind:etape-enregistrement="true"
+          v-bind:etape-vote="false"
+          v-bind:photo-prise="picture"
+          v-bind:cni-user="cniUser"
+          v-bind:user-informations="userInformations"
+        ></reconaissance-faciale >
+      </div>
 
   </div>
 </template>
@@ -45,7 +56,10 @@ module.exports = {
         picturelink: {type: String},
         userConnected : {type : Object},
         cniUser: {type: String},
-        choixCandidat:{type: Object}
+        choixCandidat:{type: Object},
+        etapeVote: {type: Boolean},
+        etapeEnregistrement: {type: Boolean},
+        userInformations: {type: Object},
     },
     name:"PrisePhoto",
     data(){
@@ -55,8 +69,6 @@ module.exports = {
         }
     },
     mounted(){
-      console.log(this.choixCandidat)
-
       const webcamElement = document.getElementById('webcam');
       const canvasElement = document.getElementById('canvas');
       const snapSoundElement = document.getElementById('snapSound');
@@ -75,9 +87,9 @@ module.exports = {
 
       let utiliserPhotoBtn = document.getElementById('utiliserPhotoBtn')
 
-      utiliserPhotoBtn.addEventListener('click', closWebcam);
+      utiliserPhotoBtn.addEventListener('click', closeWebcam);
 
-      function closWebcam(){
+      function closeWebcam(){
         webcam.stop()
       }
 

@@ -3,11 +3,13 @@ const AjouterVote = window.httpVueLoader("./components/AjouterVote.vue")
 const Vote = window.httpVueLoader("./components/Vote.vue")
 const ReconaissanceFaciale = window.httpVueLoader("./components/ReconaissanceFaciale.vue")
 const PrisePhoto = window.httpVueLoader("./components/PrisePhoto.vue");
+const EnregistrementModel = window.httpVueLoader("./components/EnregistrementModel.vue");
 
 const routes =[
     {path : '/', component: Accueil},
     {path: '/AjouterVote', component: AjouterVote},
-    {path: '/vote', component: Vote}
+    {path: '/vote', component: Vote},
+    {path: '/EnregistrementModel', component: EnregistrementModel},
 ]
 
 const router = new VueRouter({

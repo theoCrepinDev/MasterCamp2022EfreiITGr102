@@ -113,6 +113,14 @@ router.get('/suffrage/:CNI', async (req, res) => {
     })
 });
 
+//route pour récupérer l'ensemble des numéros CNI de la base de données
+router.get('/CNI', async (req, res) => {
+    db.query("SELECT No_CNI FROM utilisateur", async (err, resultRecupCNI) => {
+        if(err) throw err;
+        res.status(200).json(resultRecupCNI)
+    })
+})
+
 
 //promise pour vérifier si le votant a déja voté
 const verifierEligibilite = (CNI) => {
