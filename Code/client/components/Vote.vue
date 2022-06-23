@@ -57,6 +57,8 @@
                             </div>
                             <div class="modal-body">
                                 Voulez-vous valider votre vote pour {{candidat.Nom_candidat}} {{candidat.Prénom_candidat}}
+                                <br/>
+                                Cliquer sur "Voter" pour lancer la Reconnaissance Faciale
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>

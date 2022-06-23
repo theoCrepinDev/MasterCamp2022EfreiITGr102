@@ -5,10 +5,9 @@ const ReconaissanceFaciale = window.httpVueLoader("./components/ReconaissanceFac
 const PrisePhoto = window.httpVueLoader("./components/PrisePhoto.vue");
 
 const routes =[
-    {path : '/validationVoteIdentite', component: PrisePhoto},
+    {path : '/', component: Accueil},
     {path: '/AjouterVote', component: AjouterVote},
-    {path: '/vote', component: Vote},
-    {path : '/ReconnaissanceFaciale', component: ReconaissanceFaciale}
+    {path: '/vote', component: Vote}
 ]
 
 const router = new VueRouter({

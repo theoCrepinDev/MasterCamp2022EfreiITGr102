@@ -1,4 +1,5 @@
 let imageUpload = document.getElementById('imageUpload')
+let imageDiv = document.getElementById('imgPrise')
 
 Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri('/files/models'),
@@ -19,8 +20,6 @@ async function start() {
   console.log('Module Prêt')
   // imageUpload.addEventListener('change', async () => {
     image = document.getElementById('imgPrise')
-    console.log('img to biffer')
-    console.log(image)
     canvas = faceapi.createCanvasFromMedia(image)
     let displaySize = { width: image.width, height: image.height }
     faceapi.matchDimensions(canvas, displaySize)
