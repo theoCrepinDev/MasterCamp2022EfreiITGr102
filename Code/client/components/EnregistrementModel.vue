@@ -61,9 +61,9 @@ module.exports = {
         async validerModels(){
             this.photo1 = document.getElementById('picture1Div').childNodes[0].src;
             this.photo2 = document.getElementById('picture2Div').childNodes[0].src;
-            //Remplacer '22' par le numéron CNI du user
-            await axios.post('/apiModel/model-upload/' + 1 + '/' + '22' , {file : this.photo1})
-            await axios.post('/apiModel/model-upload/' + 2 + '/' + '22' , {file : this.photo2})
+            //Remplacer '11' par le numéron CNI du user
+            await axios.post('/apiModel/model-upload/' + 1 + '/' + '11' , {file : this.photo1})
+            await axios.post('/apiModel/model-upload/' + 2 + '/' + '11' , {file : this.photo2})
             this.enregistrementModel = false;
         }
     },
