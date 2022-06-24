@@ -35,17 +35,8 @@
   
 </template>
 
+
 <style scoped>
- 
-
-#form-connexion {
-  /*width:26%;
-  margin-top:5%;
-  margin-left:55%;*/
-
-}
-
-
 h1 {
   text-align: center;
   font-size:40px;

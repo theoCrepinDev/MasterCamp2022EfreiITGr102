@@ -4,8 +4,8 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                  <h2>Meet Our Team</h2>
-                  <p>L'équipe YesWeVote est fier de vous présenter ses différents membres. 6 personnes avec des profils, des compétences et des caractères différents en collaboration sur un même projet</p>
+                  <h2>Our Team</h2>
+                  <p>L'équipe YesWeVote est fier de vous présenter ses membres. 6 personnes avec des profils, des compétences et des caractères différents en collaboration sur un même projet</p>
                 </div>
             </div>
             <div class="row">
@@ -16,7 +16,7 @@
                       </div>
                         <div class="member-info">
                             <h4>Gabriel Brancato</h4>
-                            <span>Web Designer</span>
+                            <h6 class="header">Web Designer</h6>
                             <div class="social-links">
                                 <a href="https://www.facebook.com/gabriel.bancato"><i class="fab fa-facebook-f"></i></a>
                                 <a href="https://www.linkedin.com/in/gabriel-brancato-2974791a0"><i class="fab fa-linkedin-in"></i></a>
@@ -34,7 +34,7 @@
                       </div>
                         <div class="member-info">
                             <h4>Dylan Mouheb</h4>
-                            <span>Web Developer</span>
+                            <h6 class="header">Developper Front-end</h6>
                             <div class="social-links">
                                 <a href="https://www.facebook.com/dylan.mouheb"><i class="fab fa-facebook-f"></i></a>
                                 <a href="mailto:dylan.mouheb@efrei.net"><i class="fa fa-envelope" aria-hidden="true"></i></a>
@@ -52,7 +52,7 @@
                       </div>
                         <div class="member-info">
                             <h4>Théo Crépin</h4>
-                            <span>SEO Expert</span>
+                            <h6 class="header">Chef de Projet</h6>
                             <div class="social-links">
                                 <a href="https://www.linkedin.com/in/theocrepin"><i class="fab fa-linkedin-in"></i></a>
                                 <a href="mailto:theo.crepin@efrei.net"><i class="fa fa-envelope" aria-hidden="true"></i></a>
@@ -69,7 +69,7 @@
                       </div>
                         <div class="member-info">
                             <h4>Mihaja RANDRIAMAROMANANA</h4>
-                            <span>ISO Developer</span>
+                            <h6 class="header">Developper Front-end</h6>
                             <div class="social-links">
                                 <a href="https://www.facebook.com/mihajamandresy23/"><i class="fab fa-facebook-f"></i></a>
                                 <a href="https://twitter.com/MihajaRandrima1"><i class="fab fa-twitter"></i></a>
@@ -88,7 +88,7 @@
                       </div>
                         <div class="member-info">
                             <h4>Othmane OUBOUSELHAM</h4>
-                            <span>SEO Expert</span>
+                            <h6 class="header"> Developper Back-end</h6>
                             <div class="social-links">
                                 <a href="https://www.linkedin.com/in/othmane-oubouselham-8721b7219"><i class="fab fa-linkedin-in"></i></a>
                                 <a href="mailto:othmane.oubouselham@efrei.net"><i class="fa fa-envelope" aria-hidden="true"></i></a>
@@ -105,7 +105,7 @@
                       </div>
                         <div class="member-info">
                             <h4>Mohammed Sabir BELLAAZIRI</h4>
-                            <span>SEO Expert</span>
+                            <h6 class="header">Developper Back-end</h6>
                             <div class="social-links">
                                 <a href="https://www.linkedin.com/in/mohammed-saber-bellaaziri-83a946218"><i class="fab fa-linkedin-in"></i></a>
                                 <a href="mailto:mohammed-sabir.bellaaziri@efrei.net"><i class="fa fa-envelope" aria-hidden="true"></i></a>
@@ -113,7 +113,8 @@
                         </div>
                     </div>
                 </div>
-                 <p>© yeswevote.com, Inc. All rights reserved.</p>
+                 <p class="titre"> <a> © yeswevote.com, Inc. All rights reserved.</a></p>
+
             </div>
         </div>
     </section>
@@ -123,8 +124,8 @@
    #team {
     padding: 60px 0;
     text-align: center;
-    background-color: rgb(181, 175, 175);
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #000000;
 }
 #team h2 {
     position: relative;
@@ -151,7 +152,7 @@
     margin-bottom: 20px;
     position: relative;
     overflow: hidden;
-    background-color:rgb(165, 159, 159);
+    background-color:rgba(230, 230, 230, 1);
     padding: 10px;
     border-radius: 15px 0px 15px 0px;
     box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.4);
@@ -188,11 +189,35 @@
     color: #fff;
 }
 #team .member .social-links a:hover {
-    color: #ffc107;
+    color: #ff0000;
 }
 #team .member .social-links i {
     font-size: 18px;
     margin: 0 2px;
+}
+
+.row .titre{
+    position: absolute;
+width: 1500px;
+height: 70px;
+left: 0px;
+top: 900px;
+
+background: #EBEBEB;
+border-radius: 15px;
+
+font-family: 'Poppins';
+font-style:oblique;
+font-size: 28px;
+line-height: 70px;
+text-align: center;
+letter-spacing: 0.03em;
+color: #000000;
+}
+
+.member-info .header {
+    color:whitesmoke;
+
 }
  </style>
 

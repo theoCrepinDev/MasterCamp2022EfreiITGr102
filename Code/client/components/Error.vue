@@ -1,6 +1,7 @@
 <template>
     <div>
         <div id="image-fond"></div>
+         <p>salut</p>
          <a class="btn btn-primary btn-block btn-lg button" href='/' role="button"> Retour au menu </a>
     </div>
     
@@ -15,8 +16,8 @@ module.exports = {
 
 <style scoped>
 #image-fond {
-height: 462px!important;
-width: 800px!important;
+height: 350px!important;
+width: 450px!important;
 margin-left: auto;
 margin-right: auto;
 background-image:url("../assets/fond1.png");
