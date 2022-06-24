@@ -1,4 +1,5 @@
 const Accueil = window.httpVueLoader("./components/Accueil.vue")
+
 const AjouterVote = window.httpVueLoader("./components/AjouterVote.vue")
 const Vote = window.httpVueLoader("./components/Vote.vue")
 const ReconaissanceFaciale = window.httpVueLoader("./components/ReconaissanceFaciale.vue")
@@ -10,7 +11,7 @@ const routes =[
     {path: '/AjouterVote', component: AjouterVote},
     {path: '/vote', component: Vote},
     {path: '/EnregistrementModel', component: EnregistrementModel},
-]
+
 
 const router = new VueRouter({
     routes
@@ -33,6 +34,7 @@ var app = new Vue({
     async mounted(){
     },
     methods:{
+
         async ajouterSuffrage(data){
             await axios.post('/api/suffrage', data).then(async response => {
                 console.log(response.message)
@@ -49,12 +51,6 @@ var app = new Vue({
                     this.reponseVoter.code = rep.response.data.code
                     this.reponseVoter.message = rep.response.data.message
                 })
-        },
-        pictureTaken(data){
-            this.picturelink = data
-        },
-        test(){
-            console.log('mika ma salope')
         }
     }
-})
+)
