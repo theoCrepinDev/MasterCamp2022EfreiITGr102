@@ -47,6 +47,9 @@
                           <li class="nav-item">
                             <a class="nav-link active" href="/#/vote" aria-current="page">Vote</a>
                           </li>
+                          <li class="nav-item" v-if="userConnected.admin === true">
+                            <a class="nav-link active" aria-current="page" href="/#/AjouterVote">Ajouter Vote</a>
+                           </li>
                           
                         </ul>
                     </div>

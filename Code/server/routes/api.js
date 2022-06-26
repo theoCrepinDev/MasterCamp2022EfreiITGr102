@@ -229,16 +229,18 @@ router.get('/utilisateur', auth, async (req, res) => {
             const sql = 'SELECT * FROM utilisateur WHERE No_CNI = ' + req.userCNI;
             db.query(sql, async (err, result) => {
                 if(err) throw err;
-                res.status(200).json({
+                const user = {
                     code: 0,
                     message: 'Connexion réussie !',
                     userCNI: result[0].No_CNI,
-                    token: jwt.sign(
-                        {userCNI : result[0].No_CNI},
-                        'RANDOM_TOKEN_SECRET',
-                        {expiresIn: '24h'}
-                    )
-                })    
+                    token : req.headers.authorization.split(' ')[1],
+                    admin : false
+                }
+                if(result[0].Admin == 1){
+                    user.admin = true
+                }
+                res.status(200).json(user)
+                
             })
     //     }
     // } catch (error) {
@@ -300,7 +302,7 @@ router.get('/users/:CNI/:password', async (req, res) => {
         if (err) throw err;
         if(result.length > 0){
             if(await bcrypt.compare(password, result[0].MotDePass)){
-                res.status(200).json({
+                const user = {
                     code: 0,
                     message: 'Connexion réussie !',
                     userCNI: result[0].No_CNI,
@@ -308,8 +310,13 @@ router.get('/users/:CNI/:password', async (req, res) => {
                         {userCNI : result[0].No_CNI},
                         'RANDOM_TOKEN_SECRET',
                         {expiresIn: '24h'}
-                    )
-                })
+                    ),
+                    admin : false
+                }
+                if(result[0].Admin == 1){
+                    user.admin = true
+                }
+                res.status(200).json(user)
             }
             else{
                 res.status(401).json({

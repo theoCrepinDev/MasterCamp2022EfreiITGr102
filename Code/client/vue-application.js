@@ -37,7 +37,8 @@ var app = new Vue({
     data:{
         userConnected: {
             CNI : '',
-            token : ''
+            token : '',
+            admin : false
         },
         listeCandidat: [],
         reponseVoter:{
@@ -54,6 +55,7 @@ var app = new Vue({
         });
         this.userConnected.CNI = res.data.userCNI;
         this.userConnected.token = res.data.token;
+        this.userConnected.admin = res.data.admin;
         localStorage.setItem('token', res.data.token);
         console.log(res.data);
     },
@@ -70,18 +72,21 @@ var app = new Vue({
                 .then(rep => {
                     this.userConnected.CNI = rep.data.userCNI
                     this.userConnected.token = rep.data.token
+                    this.userConnected.admin = rep.data.admin
                     localStorage.setItem('token', rep.data.token)
                     console.log(rep.data.message)
                 })
                 .catch(rep => {
                     this.userConnected.CNI = ''
                     this.userConnected.token = ''
+                    this.userConnected.admin = false
                     console.log(rep.data.message)
                 })
         },
         deconnexion(){
             this.userConnected.CNI = ''
             this.userConnected.token = ''
+            this.userConnected.admin = false
             localStorage.removeItem('token')
         }
     },
