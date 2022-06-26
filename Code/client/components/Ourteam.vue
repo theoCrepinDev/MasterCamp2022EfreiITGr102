@@ -138,8 +138,8 @@
     margin: 25px 0px 40px;
 }
 #team h2::after {
-    content: '';
-    border-bottom: 2px solid rgb(254, 41, 41);
+   content: '';
+    border-bottom: 2px solid #E30000;;
     position: absolute;
     bottom: 0px;
     right: 0px;
@@ -147,6 +147,7 @@
     width: 90px;
     margin: 0 auto;
     display: block;
+  
 }
 #team .member {
     margin-bottom: 20px;
