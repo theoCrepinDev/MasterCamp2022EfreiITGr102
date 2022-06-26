@@ -1,5 +1,5 @@
 <template>
-<div class="container row div-page-inscription">
+<div class="container row div-page-inscription" @submit.prevent="confirmerInscription">
 
 <div id="image-fond" class="col-md-6 col-lg-6"></div>
 <div class="col-md-6 col-lg-6">
@@ -10,21 +10,21 @@
 
    <div class="form-group1">
     <label for="InputEmail">Email</label>
-    <input type="Email" class="form-control" id="InputEmail" placeholder="Entrer votre Email" pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+    <input type="Email" class="form-control" id="InputEmail" placeholder="Entrer votre Email" v-model="userInformations.email" 
     required>
   </div>
 
    <div class="form-group2">
       <label for="InputPassword">Mot de passe</label>
-      <input type="password" class="form-control" id="InputPassword" placeholder="*********">
+      <input type="password" class="form-control" id="InputPassword" placeholder="*********" v-model="userInformations.password" required>
    </div>
 
    <div class="form-group3">
       <label for="InputPassword">Confirmer votre Mots de passe </label>
-      <input type="password" class="form-control" id="InputPassword" placeholder="*********">
+      <input type="password" class="form-control" id="InputPasswordConfirmation" placeholder="*********" v-model="userInformations.password_confirmation" required>
    </div>
 
-<button type="button" class="btn btn-danger btn-lg btn-block">Inscription</button>
+<button type="submit" class="btn btn-danger btn-lg btn-block">Inscription</button>
 <p class="lien"> Vous avez déjà un compte ? <a href="/Connexion" style="color:#E30000;" >Connectez-vous </a> </p>
 
 
@@ -34,6 +34,27 @@
 </div>
   
 </template>
+
+<script>
+
+module.exports = {
+  props: {
+    userInformations: {type: Object},
+  },
+  mounted() {
+    this.userInformations.email = '';
+    this.userInformations.password = '';
+    this.userInformations.password_confirmation = '';
+  },
+  methods: {
+    confirmerInscription() {
+      console.log('confirmerInscription');
+      console.log(this.userInformations);
+    }
+  }
+}
+
+</script>
 
 
 <style scoped>

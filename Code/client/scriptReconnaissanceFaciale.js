@@ -1,4 +1,15 @@
+//Reconnaissance faciale basée sur face-api
+//grandement inspiré de tutoriel sur https://www.npmjs.com/package/face-api.js
+
+//ajout de la fonction webcam avec package webcam-easy
+// https://www.npmjs.com/package/webcam-easy
+
+
+
 var labels = []
+
+let userCNI= document.getElementById('CNIUserConnected').innerText
+labels.push(userCNI)
 
 await axios.get('/api/CNI').then(response => {
   console.log(response.data)
@@ -36,6 +47,10 @@ async function start() {
     let detections = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors()
     let resizedDetections = faceapi.resizeResults(detections, displaySize)
     let results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
+    if(results.length == 0) {
+      console.log('Aucun visage détecté')
+      //supprimé les photo de modeles
+    }
     results.forEach((result, i) => {
       console.log('Utilisateur reconnu : ' + result.label)
       if(verifUserWithRecognitionResult(result.label)){

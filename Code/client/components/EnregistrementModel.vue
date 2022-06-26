@@ -33,7 +33,7 @@
 
     <div v-else>
         <prise-photo
-            v-bind:cni-user="cniUser"
+            v-bind:cni-user="userInformations.CNI"
             v-bind:etape-vote="false"
             v-bind:etape-enregistrement="true"
             v-bind:user-informations="userInformations"
@@ -47,7 +47,6 @@
 <script>
 module.exports = {
     props:{
-        cniUser: {type: String},
         userInformations: {type: Object},
     },
     data() {
@@ -59,11 +58,13 @@ module.exports = {
     },
     methods: {
         async validerModels(){
+            console.log(this.userInformations)
+
             this.photo1 = document.getElementById('picture1Div').childNodes[0].src;
             this.photo2 = document.getElementById('picture2Div').childNodes[0].src;
             //Remplacer '11' par le numéron CNI du user
-            await axios.post('/apiModel/model-upload/' + 1 + '/' + '11' , {file : this.photo1})
-            await axios.post('/apiModel/model-upload/' + 2 + '/' + '11' , {file : this.photo2})
+            await axios.post('/apiModel/model-upload/' + 1 + '/' + this.userInformations.CNI , {file : this.photo1})
+            await axios.post('/apiModel/model-upload/' + 2 + '/' + this.userInformations.CNI , {file : this.photo2})
             this.enregistrementModel = false;
         }
     },
@@ -72,7 +73,6 @@ module.exports = {
       const canvasElement = document.getElementById('canvas');
       const snapSoundElement = document.getElementById('snapSound');
       const webcam = new Webcam(webcamElement, 'user', canvasElement, snapSoundElement);
-        this.cniUser = "11"
       webcam.start()
       .then(result =>{
       })

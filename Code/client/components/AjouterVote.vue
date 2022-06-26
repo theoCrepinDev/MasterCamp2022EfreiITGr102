@@ -273,6 +273,9 @@ props:{
 </script>
 
 <style>
+/*https://stackoverflow.com/questions/27196066/bootstrap-nav-tabs-with-progress-bar
+    barre de progression utilisé sur ce tutoriel
+*/
 
 .checkout-wrap {
     font-family:'PT Sans Caption', sans-serif;
