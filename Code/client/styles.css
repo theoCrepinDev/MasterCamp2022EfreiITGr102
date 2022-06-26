@@ -8,13 +8,23 @@
 
 
 .btn-primary{
-    background-color: red; /* Changer couleur des btn-primary */
+    background-color: red; 
+    border: 1px solid red!important/* Changer couleur des btn-primary */
 }
 
 .btn-outline-primary{
     border: 1px solid red!important; /* Changer couleur des btn-primary */
     color: red;
 }
+
+.btn-primary:hover{
+    background-color: #dc3545; /* Changer couleur des btn-primary */
+}
+
+.btn-outline-primary:hover{
+    background-color: #dc3545; /* Changer couleur des btn-primary */
+}
+
 .btn-outline-primary:hover{
     border-color: var(--bs-btn-hover-border-color)!important;
 }

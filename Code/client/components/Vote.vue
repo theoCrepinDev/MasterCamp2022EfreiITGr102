@@ -149,10 +149,8 @@ module.exports =  {
         })
             .then(res => {
                 this.SuffrageAffiche = res.data;
-                console.log(this.SuffrageAffiche)
             })
             .catch(res => {
-                console.log(res)
                 this.$router.push('/Error/' + 'Veuillez vous identifier ....') 
             })
     },

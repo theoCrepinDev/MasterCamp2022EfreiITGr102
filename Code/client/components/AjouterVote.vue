@@ -267,7 +267,20 @@ props:{
 
     },
     async mounted(){
-        console.log(this.listeCandidat)
+        await axios.get('/api/verifierEligibilite' , {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        .then(rep => {
+            if(rep.data.code === 0){
+            }else{
+                this.$router.push('/Erreur/' + "Vous n'êtes pas autorisé à être ici dis donc !");
+            }
+        })
+        .catch(err => {
+            this.$router.push('/Error/' + "Vous n'êtes pas autorisé à être ici dis donc !");
+        })
     }
 }
 </script>

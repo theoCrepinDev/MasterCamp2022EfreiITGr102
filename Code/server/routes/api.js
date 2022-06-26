@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const auth = require('../middleware/auth');
+const authAdmin = require('../middleware/authAdmin');
 
 
 const Suffrage = require('../data/Suffrage');
@@ -334,6 +335,30 @@ router.get('/users/:CNI/:password', async (req, res) => {
     })
 })
 
+//route pour vérifier l'éligibilité d'un utilisateur
+router.get('/verifierEligibilite',authAdmin, async (req, res) => {
+
+    var sql = 'SELECT Admin FROM utilisateur WHERE No_CNI = ' + req.userCNI
+            await db.query(sql, async (err,result, fields) => {
+                if(err){
+                    throw err;
+                }
+                console.log(result[0].Admin)
+                if(result[0].Admin !== 1){
+                    res.status(401).json({
+                        message: 'Auth failed as Admin',
+                        error: new Error('Auth failed as Admin')
+                
+                        });
+                        return;
+                }else{
+                    res.status(200).json({
+                        code: 0,
+                        message: 'ok!'
+                    })
+                }
+            })
+})
 
 module.exports = router;
 
