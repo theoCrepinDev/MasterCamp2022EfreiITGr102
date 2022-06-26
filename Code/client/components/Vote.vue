@@ -141,7 +141,20 @@ module.exports =  {
         //const res = await axios.get('/api/suffrage');
         //this.Suffrage = res.data;
         //console.log(this.Suffrage)
-        this.SuffrageAffiche = (await axios.get('/api/suffrage/email1')).data;
+        // this.SuffrageAffiche = (await axios.get('/api/suffrage/email1')).data;
+        await axios.get('/api/suffrage/email1', {
+            headers:{
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+            .then(res => {
+                this.SuffrageAffiche = res.data;
+                console.log(this.SuffrageAffiche)
+            })
+            .catch(res => {
+                console.log(res)
+                this.$router.push('/Error/' + 'Veuillez vous identifier ....') 
+            })
     },
     components:{
         PrisePhoto

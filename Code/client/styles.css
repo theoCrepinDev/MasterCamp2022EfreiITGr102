@@ -55,7 +55,7 @@ body{
 }
 
 #navbarSupportedContent{
-    width: 300px;
+    padding-right: 10px;
     flex-basis: unset;
     flex-grow: unset;
 }

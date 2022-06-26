@@ -1,3 +1,5 @@
+
+
 const Accueil = window.httpVueLoader("./components/Accueil.vue")
 
 
@@ -8,6 +10,9 @@ const PrisePhoto = window.httpVueLoader("./components/PrisePhoto.vue");
 const EnregistrementModel = window.httpVueLoader("./components/EnregistrementModel.vue");
 const Inscription1 = window.httpVueLoader("./components/Inscription1.vue");
 const Inscription2 = window.httpVueLoader("./components/Inscription2.vue");
+const Connexion = window.httpVueLoader("./components/Login.vue");
+const Error = window.httpVueLoader("./components/Error.vue");
+const Deconnexion = window.httpVueLoader("./components/Deconnexion.vue");
 
 const routes =[
     {path : '/', component: Accueil},
@@ -16,6 +21,10 @@ const routes =[
     {path: '/EnregistrementModel', component: EnregistrementModel},
     {path: '/Inscription1', component: Inscription1},
     {path: '/Inscription2', component: Inscription2},
+    {path: '/Connexion', component: Connexion},
+    {path: '/Error/:textPage', component: Error, props: true},
+    {path: '/Deconnexion', component: Deconnexion},
+    {path: '/*', component: Error}
 ]
 
 const router = new VueRouter({
@@ -27,7 +36,8 @@ var app = new Vue({
     el: '#app',
     data:{
         userConnected: {
-            CNI : 'Theo'
+            CNI : '',
+            token : ''
         },
         listeCandidat: [],
         reponseVoter:{
@@ -37,6 +47,15 @@ var app = new Vue({
         picturelink:''
     },
     async mounted(){
+        const res = await axios.get('/api/utilisateur', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+        this.userConnected.CNI = res.data.userCNI;
+        this.userConnected.token = res.data.token;
+        localStorage.setItem('token', res.data.token);
+        console.log(res.data);
     },
     methods:{
 
@@ -46,16 +65,24 @@ var app = new Vue({
             })
                 
         },
-        async voter(data){
-            await axios.post("/api/voter/" + data.votant, data.candidat)
+        async connexion(data){
+            await axios.get('/api/users/' + data.cni + '/' + data.password)
                 .then(rep => {
-                    this.reponseVoter.code = rep.data.code
-                    this.reponseVoter.message = rep.data.message
+                    this.userConnected.CNI = rep.data.userCNI
+                    this.userConnected.token = rep.data.token
+                    localStorage.setItem('token', rep.data.token)
+                    console.log(rep.data.message)
                 })
                 .catch(rep => {
-                    this.reponseVoter.code = rep.response.data.code
-                    this.reponseVoter.message = rep.response.data.message
+                    this.userConnected.CNI = ''
+                    this.userConnected.token = ''
+                    console.log(rep.data.message)
                 })
+        },
+        deconnexion(){
+            this.userConnected.CNI = ''
+            this.userConnected.token = ''
+            localStorage.removeItem('token')
         }
     },
     login(){

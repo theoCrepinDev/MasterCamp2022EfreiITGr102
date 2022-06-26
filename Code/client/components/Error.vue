@@ -1,14 +1,17 @@
 <template>
-    <div>
-        <div id="image-fond"></div>
-         <p>salut</p>
-         <a class="btn btn-primary btn-block btn-lg button" href='/' role="button"> Retour au menu </a>
+    <div class="row" >
+        <div id="image-fond" style="height : 80vh"></div>
+         <p class="text-center">{{textPage}}</p>
+         <a class="btn btn-primary btn-block btn-lg col-md-2 offset-md-5" href='/' role="button"> Retour au menu </a>
     </div>
     
 </template>
 
 <script>
 module.exports = {
+    props:{
+        textPage : {type: String, default: 'Page inconnue ...'},
+    }
 
 }
 </script>

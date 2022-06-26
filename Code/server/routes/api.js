@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+const auth = require('../middleware/auth');
 
 
 const Suffrage = require('../data/Suffrage');
@@ -80,7 +82,7 @@ const getNombreVotants = (idSuffrage) => {
 }
 
 //route pour récupérer le suffrage qui concernent l'ustilisateur connecté.
-router.get('/suffrage/:CNI', async (req, res) => {
+router.get('/suffrage/:CNI', auth, async (req, res) => {
     //on récupère les info des suffrage qui corresponde à l'user
     db.query("SELECT * FROM suffrage ", async (err, resultRecupSuffrage) => {
         if(err) throw err;
@@ -215,8 +217,40 @@ router.post('/voter/:CNI', async (req, res) => {
 
 //Route pour gestion des utilisateurs
 
+// route au chargement de la page pour regarder si le token est valide et récupérer infos
+router.get('/utilisateur', auth, async (req, res) => {
+    // try {
+    //     const token = req.headers.authorization.split(' ')[1];
+    //     const decoded = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    //     req.userCNI = decoded.userCNI;
+    //     if(req.body.userCNI && req.body.userCNI !== userCNI){
+    //         throw 'User not authenticated';
+    //     }else{
+            const sql = 'SELECT * FROM utilisateur WHERE No_CNI = ' + req.userCNI;
+            db.query(sql, async (err, result) => {
+                if(err) throw err;
+                res.status(200).json({
+                    code: 0,
+                    message: 'Connexion réussie !',
+                    userCNI: result[0].No_CNI,
+                    token: jwt.sign(
+                        {userCNI : result[0].No_CNI},
+                        'RANDOM_TOKEN_SECRET',
+                        {expiresIn: '24h'}
+                    )
+                })    
+            })
+    //     }
+    // } catch (error) {
+    //     return res.status(401).json({
+    //     message: 'Auth failed',
+    //     error: new Error('Auth failed')
+    //     });
+    // }
+})
+
   //Inscription d'un nouvel utilisateur
-  router.post('/users', async (req, res) => {
+router.post('/users', async (req, res) => {
     const nom = req.body.Nom
     const prenom = req.body.Prenom
     const adresse = req.body.adresse
@@ -257,7 +291,41 @@ router.post('/voter/:CNI', async (req, res) => {
     })
   })
 
-
+//route connexion d'un utilisateur
+router.get('/users/:CNI/:password', async (req, res) => {
+    const CNI = req.params.CNI
+    const password = req.params.password
+    var sql = 'SELECT * FROM utilisateur WHERE No_CNI = ' + CNI
+    await db.query(sql, async (err,result, fields) => {
+        if (err) throw err;
+        if(result.length > 0){
+            if(await bcrypt.compare(password, result[0].MotDePass)){
+                res.status(200).json({
+                    code: 0,
+                    message: 'Connexion réussie !',
+                    userCNI: result[0].No_CNI,
+                    token: jwt.sign(
+                        {userCNI : result[0].No_CNI},
+                        'RANDOM_TOKEN_SECRET',
+                        {expiresIn: '24h'}
+                    )
+                })
+            }
+            else{
+                res.status(401).json({
+                    code: 1,
+                    message: 'Mot de passe incorrect !'
+                })
+            }
+        }
+        else{
+            res.status(401).json({
+                code: 1,
+                message: 'Utilisateur non enregistré !'
+            })
+        }
+    })
+})
 
 
 module.exports = router;

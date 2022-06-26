@@ -23,6 +23,7 @@
     "face-api.js": "^0.20.0",
     "fs": "^0.0.1-security",
     "http-errors": "^1.6.3",
+    "jsonwebtoken": "^8.5.1",
     "method-override": "*",
     "mongoose": "^6.4.0",
     "morgan": "^1.10.0",

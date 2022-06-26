@@ -1,173 +1,119 @@
-
 <template>
-<div>
-  <div class="sec-container">
-    <div class="form-wrapper">
-      <div class="card">
-        <div class="card-header">
-          <div id="forLogin" class="form-header active">
-            <button @click="switchChoix('Connexion')" >Connexion</button>
+<div class="container row div-page-connexion">
+  <div id="image-fond" class="col-md-6 col-lg-6">
 
-          </div>
-          <div id="forRegister" class="form-header">
-            <button @click="switchChoix('Inscription')">S'inscrire</button>
-          </div>
-        </div>
-        <div class="card-body" id="formContainer" @submit.prevent="login"> 
-          <form id="formLogin" v-if="choix==='Connexion'">
-              <h1 style="color:#E30000;">BIENVENUE</h1>
-              <h10 style="color:#63634;">Entrez vos informations</h10>
-              <input type="text" class= "form-control" placeholder="email" v-model="credential.email"/>
-              <input type="password" class="form-control" placeholder="Mot de passe" v-model="credential.password"/>
-              <button class="formButton">Connexion</button>
-          </form>
-          <form id="formRegister" v-else @submit.prevent="register" >
-               <h1 style="color:#E30000;">INSCRIPTION</h1>
-               <h10 style="color:#63634;">Inscrivez vos informations!</h10>
-               <h20> Nom</h20>
-              <input type="string" class="form-control" placeholder="entrez votre nom" v-model="personneInscription.email"/>
-              <h2> Prénom</h2>
-              <input type="string" class="form-control" placeholder="entrez votre prénom" v-model="personneInscription.email"/>
-              <h2> Email</h2>
-              <input type="string" class="form-control" placeholder="Entrez votre email" v-model="personneInscription.email"/>
-              <h2> Mots de passe</h2>
-              <input type="password" class="form-control" placeholder="*******" v-model="personneInscription.motDePasse"/>
-              <h2> Confirmez le mots de passe</h2>
-              <input type="password" class="form-control" placeholder= "*******" />
-              <button class="formButton">Inscription</button>
-          </form>
-        </div>
+  </div>
+  <div class="col-md-6 col-lg-6">
+  
+   <form id="form-connexion" @submit.prevent="connexion()">
+      <h1 style="color:#E30000;">BIENVENUE</h1>
+      <h2 style="color:#63634;">Entrez vos informations !</h2>
+
+      <div class="form-group1">
+        <label for="InputEmail1">Numéro CNI</label>
+        <input type="CNI" v-model="userInformations.cni" class="form-control" id="InputCNI" aria-describedby="CNI" placeholder="Entrez votre numéro CNI">
       </div>
-    </div>
-  </div> 
+
+      <div class="form-group2">
+        <label for="InputPassword">Mot de passe</label>
+        <input type="password" v-model="userInformations.password" class="form-control" id="InputPassword" placeholder="*********" autofocus="" required="">
+      </div>
+      <button type="submit" class="btn btn-danger btn-block">Connexion</button>
+        <p class="lien"> Vous n'avez pas de compte ? <a href="/#/Inscription1" style="color:#E30000;" >Inscrivez-vous gratuitement </a> </p>
+      
+    </form> 
+
+  </div>
 </div>
-   
 </template>
 
 <script>
 
-module.exports = {
-  props: {
-    invaliddata: {type: Boolean, default: false},
-    user:{type: Object}
+module.exports  = {
+  props:{
+    userConnected: {type: Object},
   },
-  data() {
-    return {
-      credential: {email: '', password: ''},
-      choix : "Connexion",
-      personneInscription:{
-        email:'',
-        motDePasse:''
-      }
+  data(){
+    return{
+      userInformations: {
+        cni: '',
+        password: '',
+      },
     }
   },
   methods: {
-    login() {
-      this.$emit('login', this.credential)
-    },
-    switchChoix(choix){
-      this.choix=choix
-    },
-    async register(){
-      const res = await axios.post('/api/register', this.personneInscription)
-      alert('Utilisateur inscrit')
+    connexion(){
+      this.$emit('connexion', this.userInformations)
       this.$router.push('/')
-    }  
-        
+    },
+  }
 }
 
-  }
 </script>
+
 
 <style scoped>
 
-section {
-    display: flex;
-    justify-content:center;
-    align-items: center;
-    margin: 50px 0;
+
+
+
+#image-fond {
+background-image:url("../assets/logo.png");
+background-color: rgba(234, 234, 234, 1);
+background-repeat: no-repeat;
+background-size: contain;
+margin-left: auto;
+margin-right: -500px;;
+max-width: 900%;
+
 }
 
-.form-wrapper {
-  display: flex;
-  justify-content:center;
-  align-items: center;
-  flex: auto;
+#form-connexion {
+  width:80%;
+  margin-top:13%;
+  margin-left:-120%; 
+  height: 610px;
 }
 
-.form-wrapper .card {
-  width: 360px;
-  padding:20px;
-  background-color: white;
-}
-
-.card-header {
-  display: flex;
-  justify-content:left;
-  align-items: center;
-  margin: 30px 20px 0;
-  font-size:1.1rem;
-  color:black;
-  box-shadow: 2px 3px 8px gray;
-  border-radius:50px;
-}
-
-.card-header .form-header {
-  flex: 50%;
+h1 {
   text-align: center;
-  padding: 10px 0;
-  border: 1px solid transparent;
-  border-radius:50px;
-  user-select: none;
-  cursor: pointer;
+  font-size:42px;
+  line-height:87px;
+ 
 }
 
-.card-body{
-  display: flex;
-  flex-wrap: nowrap;
-  padding: 40px 0;
-  text-align: center;
-}
-form{
-  flex:0 0 100%;
+h2 {
+  color:#636364;
+  text-align:center;
+  font-size: 19px;
+  line-height: 39px;
+  margin-top: -3.5%;
 }
 
-.toggleForm{
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s, visibility 0.3s;
+.btn-danger{
+  margin-left: 22.5%;
+  margin-top: 5%;
+  width: 60%;
+
 }
 
-.form-controle{
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid rgba(227, 0, 0, 1);
-  background: none;
-  outline: none;
-  padding: 10px 5px;
-  margin-bottom: 20px;
-  color: 
-rgba(227, 0, 0, 1);
-}
-/*permet de prendre une couleur particulière*/
-.form-control::placeholder{
-color:black;
+.form-group2 {
+  margin-top: 7%;
 }
 
-.formButton {
-border: 1px solid transparent;
-padding: 1rem 3rem;
-background-color:
-rgba(227, 0, 0, 1);
-border-radius:50px;
-margin-top: 1rem;
-font-size: 1rem;
-transition: transform 0.3s, box-shadow 0.3s
+.form-group1{
+  margin-top: 11%;
 }
 
-.formButton:hover{
-  box-shadow: 3px 5px 115px 
-rgba(227, 0, 0, 1);
-  transform: translatev(-5px);
+.lien{
+  margin-left: 50px;
+  margin-top: 5%;
+  font-family: "Gill Sans", sans-serif;
+  font-size: smaller;
+}
+.div-page-connexion{
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

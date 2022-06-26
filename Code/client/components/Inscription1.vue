@@ -71,7 +71,7 @@
    </div>
    </div> 
     <button type="submit" class="btn btn-danger btn-lg " href="/Inscription" >Suivant</button>
-    <p class="lien"> Vous avez déjà un compte ? <a href="/Connexion" style="color:#E30000;" >Connectez-vous </a> </p>
+    <p class="lien"> Vous avez déjà un compte ? <a href="/#/Connexion" style="color:#E30000;" >Connectez-vous </a> </p>
 
   </form>
 
