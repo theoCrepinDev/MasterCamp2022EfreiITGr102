@@ -216,31 +216,41 @@ router.post('/voter/:CNI', async (req, res) => {
 //Route pour gestion des utilisateurs
 
   //Inscription d'un nouvel utilisateur
-  router.post('/register', async (req, res) => {
-    const nom = req.body.nom
-    const prenom = req.body.prenom
+  router.post('/users', async (req, res) => {
+    const nom = req.body.Nom
+    const prenom = req.body.Prenom
+    const adresse = req.body.adresse
+    const CNI = req.body.CNI
+    const codePostal = req.body.CodePostal
+    const date = req.body.Date
+    const prenom2 = req.body.Prenom2
+    const sexe = req.body.Sexe
+    const ville = req.body.Ville
     const email = req.body.email
-    const password = req.body.motDePasse
+    const password = req.body.password
     const hash = await bcrypt.hash(password, 10);
-    var type = 'user'
+    var type = '0'
   
     //on regarde si cet utilisateur existe déjà
-    var sql ='SELECT * FROM user WHERE mail= ?'
-    var value = [email]
-    await db.query(sql, [value], async (err,result, fields) => {
+    var sql ='SELECT * FROM utilisateur WHERE No_CNI = ' + CNI
+    await db.query(sql, async (err,result, fields) => {
         if (err) throw err;
         if(result.length > 0){
             res.status(401).json({
+                code: 1,
                 message: 'Utilisateur déjà enregistré, essayez de vous connecter !'
             })
             return
         }
         else{
-            var sql = 'INSERT INTO user ( nom,prenom,email, password, type) VALUES ?'
-            var value =[[email, hash, type]];
+            var sql = 'INSERT INTO utilisateur ( No_CNI, Nom_user, Prénom_user, Deuxième_Prénom, Sexe, Date_Naissance, Addresse_résidence,Ville_Naissance, Code_Postal, Email, MotDePass, Admin) VALUES ?'
+            var value =[[CNI, nom, prenom, prenom2, sexe, date, adresse, ville, codePostal, email, hash, type]];
             await db.query(sql, [value], function(err,result) {
                 if (err) throw err;
-                res.send('il est enregistré')
+                res.status(201).json({
+                    code: 0,
+                    message: 'Utilisateur enregistré !'
+                })
             })
             return true
         }

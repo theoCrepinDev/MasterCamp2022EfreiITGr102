@@ -47,9 +47,19 @@ module.exports = {
     this.userInformations.password_confirmation = '';
   },
   methods: {
-    confirmerInscription() {
-      console.log('confirmerInscription');
-      console.log(this.userInformations);
+    async confirmerInscription() {
+      if(this.password === this.password_confirmation){
+        await axios.post('/api/users', this.userInformations)
+        .then(response => {
+          console.log(response.data);
+          this.$router.push('/Connexion');
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      }else{
+        alert("Les mots de passe ne correspondent pas");
+      }
     }
   }
 }
