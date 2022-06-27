@@ -13,6 +13,9 @@ const Inscription2 = window.httpVueLoader("./components/Inscription2.vue");
 const Connexion = window.httpVueLoader("./components/Login.vue");
 const Error = window.httpVueLoader("./components/Error.vue");
 const Deconnexion = window.httpVueLoader("./components/Deconnexion.vue");
+const About = window.httpVueLoader("./components/Ourteam.vue");
+const Resultats = window.httpVueLoader("./components/Resultats.vue");
+const CompteRebours = window.httpVueLoader("./components/CompteRebours.vue");
 
 const routes =[
     {path : '/', component: Accueil},
@@ -24,6 +27,9 @@ const routes =[
     {path: '/Connexion', component: Connexion},
     {path: '/Error/:textPage', component: Error, props: true},
     {path: '/Deconnexion', component: Deconnexion},
+    {path: '/About', component: About},
+    {path: '/Resultats', component: Resultats},
+    {path: '/CompteRebours', component: CompteRebours},
     {path: '/*', component: Error}
 ]
 

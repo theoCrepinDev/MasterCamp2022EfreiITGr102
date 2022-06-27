@@ -48,7 +48,7 @@ module.exports = {
   },
   methods: {
     async confirmerInscription() {
-      if(this.password === this.password_confirmation){
+      if(this.userInformations.password === this.userInformations.password_confirmation){
         await axios.post('/api/users', this.userInformations)
         .then(response => {
           console.log(response.data);

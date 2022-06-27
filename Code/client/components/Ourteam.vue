@@ -113,7 +113,6 @@
                         </div>
                     </div>
                 </div>
-                 <p class="titre"> <a> © yeswevote.com, Inc. All rights reserved.</a></p>
 
             </div>
         </div>

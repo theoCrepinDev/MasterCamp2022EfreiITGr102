@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="voterPossible === true">
 <div v-if="verification === false">
     <div class="titre-presentation-suffrage ">
         <h2>Suffrage :</h2>
@@ -37,7 +37,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{candidat.Nom_candidat}} - {{candidat.Prénom_candidat}}</h5>
                         <p class="card-text">{{candidat.Description_candidat}}</p>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#validerVote">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#validerVote"  @click="choixCandidat(candidat)">
                             Voter !
                         </button>
                         <a :href="candidat.Programme_candidat" class="btn btn-outline-primary">Plus d'info</a>
@@ -50,8 +50,8 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="validerVoteLabel">Validation vote</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <h5 class="modal-title" id="validerVoteLabel" >Validation vote</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -81,6 +81,9 @@
     ></prise-photo>
 </div>
 </div>
+<error v-else 
+    text-page="Vous ne pouvez plus voter pour ce suffrage ..."
+></error>
 </template>
 
 <script>
@@ -97,27 +100,16 @@ module.exports =  {
             Suffrage:[],
             SuffrageAffiche: {},
             verification : false,
-            candidatChoisit: null
+            candidatChoisit: null,
+            voterPossible : false,
         }
     },
     methods:{
         async voter(candidat){
             this.verification = true
-            this.candidatChoisit = candidat
-            // const data = {
-            //     votant: '1',
-            //     candidat: candidat
-            // }
-            // await axios.post("/api/voter/" + data.votant, data.candidat)
-            //     .then(rep => {
-            //         console.log("then")
-            //         console.log(rep)
-            //     })
-            //     .catch(rep => {
-            //         console.log("catch")
-            //         console.log(rep)
-            //     })
-            //reste a rediriger sur page d'acceuil et indiquer que le vote a été pris en compte
+        },
+        choixCandidat(data){
+            this.candidatChoisit = data
         },
         async validerVote(){
             const data = {
@@ -137,11 +129,19 @@ module.exports =  {
 
     },
     async mounted(){
-        //console.log(this.listeCandidat)
-        //const res = await axios.get('/api/suffrage');
-        //this.Suffrage = res.data;
-        //console.log(this.Suffrage)
-        // this.SuffrageAffiche = (await axios.get('/api/suffrage/email1')).data;
+        await axios.get('/api/suffrage/heureFin')
+            .then(rep => {
+                const date = rep.data[0].Date_fin_suffrage.split('T')[0]
+                const dateFin = new Date(date + ' ' + rep.data[0].Heure_fin_suffrage)
+                dateFin.setDate(dateFin.getDate() + 1)
+                const dateNow = new Date()
+                console.log(dateFin)
+                console.log(dateNow)
+                if(dateNow < dateFin){
+                    this.voterPossible = true;
+                }
+            })
+
         await axios.get('/api/suffrage/email1', {
             headers:{
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
@@ -155,7 +155,8 @@ module.exports =  {
             })
     },
     components:{
-        PrisePhoto
+        PrisePhoto,
+        Error
     }
 
 }

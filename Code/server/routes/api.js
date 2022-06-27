@@ -73,7 +73,7 @@ const getCandidtas = (idSuffrage) => {
 }
 
 //promise pour récupérer nombre de votants avec id_suffrage
-const getNombreVotants = (idSuffrage) => {
+const getNombreVotants = () => {
     return new Promise((resolve, reject) => {
         db.query("SELECT count(*) FROM utilisateur " , async (err, resultRecupVotantsLength) => {
                 
@@ -81,6 +81,13 @@ const getNombreVotants = (idSuffrage) => {
         })
     })
 }
+//route récupérer heure fin suffrage
+router.get("/suffrage/heureFin", async (req, res) => {
+    db.query("SELECT Heure_fin_suffrage, Date_fin_suffrage FROM suffrage", async (err, resultRecupHeureFin) => {
+        if(err) throw err;
+        res.json(resultRecupHeureFin);
+    })
+})
 
 //route pour récupérer le suffrage qui concernent l'ustilisateur connecté.
 router.get('/suffrage/:CNI', auth, async (req, res) => {
@@ -183,6 +190,8 @@ const augmenterVoteCandidat = (idCandidat) => {
 
 router.post('/voter/:CNI', async (req, res) => {
     const idCandidat = req.body.ID_candidat;
+    console.log(idCandidat);
+    console.log(req.body)
     verifierEligibilite(req.params.CNI)
         .then((data) => {
             aVote(req.params.CNI, idCandidat)
@@ -214,6 +223,15 @@ router.post('/voter/:CNI', async (req, res) => {
             res.status(200).json(probleme);
         })
 })
+
+//route pour récupérer les candidats 
+router.get('/candidats', async (req, res) => {
+    db.query("SELECT * FROM candidat", async (err, resultRecupCandidats) => {
+        if(err) throw err;
+        console.log(resultRecupCandidats)
+        res.status(200).json(resultRecupCandidats)
+    })
+} )
 
 
 //Route pour gestion des utilisateurs

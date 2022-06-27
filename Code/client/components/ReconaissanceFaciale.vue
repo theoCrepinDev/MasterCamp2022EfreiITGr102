@@ -61,7 +61,7 @@ module.exports = {
     methods:{
         async validerVote(){
             const data = {
-                votant: '1',
+                votant: this.cniUser,
                 candidat: this.choixCandidat
             }
             await axios.post("/api/voter/" + data.votant, data.candidat)

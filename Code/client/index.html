@@ -39,17 +39,15 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                           <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/#/AjouterVote">Contact</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link active" aria-current="page">About</a>
-                          </li>
-                          <li class="nav-item">
                             <a class="nav-link active" href="/#/vote" aria-current="page">Vote</a>
                           </li>
-                          <li class="nav-item" v-if="userConnected.admin === true">
-                            <a class="nav-link active" aria-current="page" href="/#/AjouterVote">Ajouter Vote</a>
-                           </li>
+                          <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/#/Resultats">Résultats</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/#/About">About</a>
+                          </li>
+                          
                           
                         </ul>
                     </div>
@@ -81,6 +79,10 @@
             
             ></router-view>
         </main>
+        <footer>
+            <p class="titre"> <a> © yeswevote.com, Inc. All rights reserved.</a></p>
+
+        </footer>
     </div>
     <script src="/vue-application.js"></script>
 </body>
