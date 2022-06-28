@@ -14,7 +14,7 @@
     <div class="btnPartieGauche">
             <button type="submit" class="btn-secondary btn btn-lg btn-block" href="/#/vote" aria-current="page"><a class="nav-link active" href="/#/vote" aria-current="page">Retour au menu</a></button>
     </div>
-    
+    </div>
 
 </template>
 
@@ -53,9 +53,9 @@ async mounted(){
         this.displayElement.sec  = jQuery('#countdown_sec');
         await axios.get('/api/suffrage/heureFin')
             .then(response => {
-                console.log(response.data[0].Heure_fin_suffrage);
-                this.targetTime = new Date('2022-11-05 ' + response.data[0].Heure_fin_suffrage);
-                this.targetTime.setHours(this.targetTime.getHours() - 1);
+                this.targetTime = new Date(response.data[0].Date_fin_suffrage.split('T')[0] + ' ' + response.data[0].Heure_fin_suffrage);
+                this.targetTime.setHours(this.targetTime.getHours());
+                this.targetTime.setDate(this.targetTime.getDate() + 1);
             })
         // this.displayElement.targetTime = res.data.Heure_fin_suffrage
 
@@ -68,23 +68,28 @@ async mounted(){
     // Met à jour le compte à rebours (tic d'horloge)
     tick: function(){
         // Instant présent
-        var timeNow  = new Date();
+        var timeNow  = new Date(Date.now());
          
         // On s'assure que le temps restant ne soit jamais négatif (ce qui est le cas dans le futur de targetTime)
-        if( timeNow > this.targetTime ){
-            timeNow = this.targetTime;
+        if( timeNow >= this.targetTime ){
+            
         }
          
         // Calcul du temps restant
-        var diff = this.dateDiff(timeNow, this.targetTime);
+        if (timeNow < this.targetTime) {
+            
+            var diff = this.dateDiff(timeNow, this.targetTime);
+            
+            this.displayElement.hour.text( diff.hour );
+            this.displayElement.min.text(  diff.min  );
+            this.displayElement.sec.text(  diff.sec  );
+        }
          
-        this.displayElement.hour.text( diff.hour );
-        this.displayElement.min.text(  diff.min  );
-        this.displayElement.sec.text(  diff.sec  );
     },
      
     
     dateDiff: function(date1, date2){
+        
         var diff = {}                           
         var tmp = date2 - date1;
  
@@ -98,6 +103,7 @@ async mounted(){
         diff.day = tmp;
  
         return diff;
+        
     }
 };
  
