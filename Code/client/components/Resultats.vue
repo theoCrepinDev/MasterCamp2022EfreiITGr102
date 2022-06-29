@@ -17,14 +17,14 @@
   
                 <path class="around" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
   
-                <path class="percent" v-bind:stroke-dasharray="candidat.Nombre_vote+','+ 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                <path class="percent" v-bind:stroke-dasharray="candidat.pourcentage+','+ 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
   
                 <text x="18" y="14" text-anchor="middle" dy="7" font-size="20">{{index + 1}}st</text>
   
             </svg>
             <img :src="candidat.Photo_candidat" class="card-img-top" alt="...">
             <div class="card-body">
-                <h5 class="card-title">{{candidat.Nom_candidat}} {{candidat.Prénom_candidat}}</h5>
+                <h5 class="card-title">{{candidat.Nom_candidat}} {{candidat.Prénom_candidat}} nombre vote  : {{candidat.Nombre_vote}}</h5>
                 <p class="card-text">{{candidat.Description_candidat}}</p>
                         
                 <a :href="candidat.Programme_candidat" class="btn btn-outline-primary">Programme</a>
@@ -74,7 +74,9 @@ module.exports =  {
                                 });
                             this.major = this.summ/2.0;
                             this.candidats.map(candidat => {
-                                candidat.Nombre_vote = (parseFloat(candidat.Nombre_vote / parseFloat(this.summ)) * 100);
+                                // transformation du nombre de votes en pourcentages 
+
+                                candidat.pourcentage = (parseFloat(candidat.Nombre_vote / parseFloat(this.summ)) * 100);
                             });
                         })
 

@@ -10,8 +10,8 @@
             Créez un compte YesWeVote et exprimez vous en votant à distance.
         </p>
         <div class="btnPartieGauche" v-if="userConnected.CNI === ''">
-            <button type="button" class="btn-secondary btn btn-lg btn-block">Connexion</button>
-            <button type="button" class="btn-secondary btn btn-lg btn-block">Inscription</button>
+            <button type="button" class="btn-secondary btn btn-lg btn-block" onclick="location.href='/#/Connexion'">Connexion</button>
+            <button type="button" class="btn-secondary btn btn-lg btn-block" onclick="location.href='/#/Inscription1'">Inscription</button>
         </div>
         <div v-else-if="userConnected.admin">
             <button type="button" class="btn-secondary btn btn-lg btn-block" aria-current="page" onclick="location.href='/#/AjouterVote'">Ajouter Vote</button>
