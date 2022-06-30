@@ -175,7 +175,7 @@ props:{
             this.suffrage.votants = this.ajoutParticipants;
             this.avancerEtape()
             this.$emit('ajouter-suffrage', this.suffrage)
-            this.$router.push('/Accueil');
+            this.$router.push('/');
         },
         ajouterCandidat(){
             this.afficherFormulaireCandidat = true;

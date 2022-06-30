@@ -43,6 +43,7 @@ router.post("/suffrage", async (req, res) => {
         db.query("SELECT ID_suffrage FROM suffrage WHERE Nom_suffrage='"+nomSuffrage+"' AND Description_suffrage='"+descriptionSuffrage +"'", async(err, resultRecupID) => {
             if(err)throw err;
             const idSuffrage = resultRecupID[0].ID_suffrage;
+            db.query("UPDATE utilisateur set ID_candidat = 0 ")
             //insertion des candidats
             for(let candidat of candidatsSuffrage){
                 db.query("INSERT INTO candidat (ID_suffrage, Nom_candidat,Prénom_candidat,Description_candidat,Photo_candidat, Programme_candidat) values (" + idSuffrage + ", '"+candidat.nom+"','"+candidat.prenom+"','"+candidat.description+"','"+candidat.photo+ "', '" + candidat.programme +"')", async (err, resultPostCandidat) => {
@@ -83,7 +84,7 @@ const getNombreVotants = () => {
 }
 //route récupérer heure fin suffrage
 router.get("/suffrage/heureFin", async (req, res) => {
-    db.query("SELECT Heure_fin_suffrage, Date_fin_suffrage FROM suffrage", async (err, resultRecupHeureFin) => {
+    db.query("SELECT Heure_fin_suffrage, Date_fin_suffrage FROM suffrage order by ID_suffrage desc", async (err, resultRecupHeureFin) => {
         if(err) throw err;
         res.json(resultRecupHeureFin);
     })
@@ -92,9 +93,10 @@ router.get("/suffrage/heureFin", async (req, res) => {
 //route pour récupérer le suffrage qui concernent l'ustilisateur connecté.
 router.get('/suffrage/:CNI', auth, async (req, res) => {
     //on récupère les info des suffrage qui corresponde à l'user
-    db.query("SELECT * FROM suffrage ", async (err, resultRecupSuffrage) => {
+    db.query("SELECT * FROM suffrage order by ID_suffrage desc limit 1", async (err, resultRecupSuffrage) => {
         if(err) throw err;
         //on regarde si il y a au moins un suffrage
+        console.log(resultRecupSuffrage);
         if(resultRecupSuffrage.length <= 0){
             res.status(204).json({message : "L'utilisateur n'est éligible à aucun vote..."})
         }else{
@@ -226,7 +228,7 @@ router.post('/voter/:CNI', async (req, res) => {
 
 //route pour récupérer les candidats 
 router.get('/candidats', async (req, res) => {
-    db.query("SELECT * FROM candidat", async (err, resultRecupCandidats) => {
+    db.query("SELECT * FROM candidat c where c.ID_suffrage = (SELECT ID_suffrage FROM suffrage order by ID_suffrage desc limit 1)", async (err, resultRecupCandidats) => {
         if(err) throw err;
         console.log(resultRecupCandidats)
         res.status(200).json(resultRecupCandidats)
