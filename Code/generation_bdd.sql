@@ -1,55 +1,44 @@
-if(database db_mastercamp exist){
-  drop database db_mastercamp;
-}
-
 create database db_mastercamp;
 
 use db_mastercamp;
 
-CREATE TABLE Suffrage(
-   ID_suffrage INT,
-   Nom_suffrage VARCHAR(50),
-   Description_suffrage TEXT,
-   Date_fin_suffrage DATE,
-   PRIMARY KEY(ID_suffrage)
-);
+CREATE TABLE `suffrage` (
+  `ID_suffrage` int NOT NULL AUTO_INCREMENT,
+  `Heure_fin_suffrage` time DEFAULT NULL,
+  `Nom_suffrage` varchar(50) DEFAULT NULL,
+  `Description_suffrage` text,
+  `Date_fin_suffrage` date DEFAULT NULL,
+  PRIMARY KEY (`ID_suffrage`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE Candidat(
-   ID_candidat INT,
-   Nom_candidat VARCHAR(50),
-   Prénom_candidat VARCHAR(50),
-   Description_candidat TEXT,
-   Nombre_vote INT,
-   Photo_candidat TEXT,
-   Programme_candidat TEXT,
-   ID_suffrage INT NOT NULL,
-   PRIMARY KEY(ID_candidat),
-   FOREIGN KEY(ID_suffrage) REFERENCES Suffrage(ID_suffrage)
-);
+CREATE TABLE `candidat` (
+  `ID_candidat` int NOT NULL AUTO_INCREMENT,
+  `Nom_candidat` varchar(50) DEFAULT NULL,
+  `Prénom_candidat` varchar(50) DEFAULT NULL,
+  `Description_candidat` text,
+  `Nombre_vote` int DEFAULT '0',
+  `Photo_candidat` text,
+  `Programme_candidat` text,
+  `ID_suffrage` int NOT NULL,
+  PRIMARY KEY (`ID_candidat`),
+  KEY `candidat_ibfk_1` (`ID_suffrage`),
+  CONSTRAINT `candidat_ibfk_1` FOREIGN KEY (`ID_suffrage`) REFERENCES `suffrage` (`ID_suffrage`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE Utilisateur(
-   No_CNI INT,
-   Nom_user VARCHAR(50),
-   Deuxième_Prénom VARCHAR(50),
-   Sexe VARCHAR(50),
-   Date_Naissance DATE,
-   Ville_Naissance VARCHAR(50),
-   Addresse_résidence VARCHAR(200),
-   Code_Postal INT,
-   Prénom_user VARCHAR(50),
-   Email VARCHAR(100),
-   MotDePass TEXT,
-   Admin LOGICAL,
-   ID_candidat INT NOT NULL,
-   PRIMARY KEY(No_CNI),
-   FOREIGN KEY(ID_candidat) REFERENCES Candidat(ID_candidat)
-);
-
-CREATE TABLE Eligible(
-   No_CNI INT,
-   ID_suffrage INT,
-   Vote CHAR(3),
-   PRIMARY KEY(No_CNI, ID_suffrage),
-   FOREIGN KEY(No_CNI) REFERENCES Utilisateur(No_CNI),
-   FOREIGN KEY(ID_suffrage) REFERENCES Suffrage(ID_suffrage)
-);
+CREATE TABLE `utilisateur` (
+  `No_CNI` int NOT NULL,
+  `Nom_user` varchar(50) DEFAULT NULL,
+  `Deuxième_Prénom` varchar(50) DEFAULT NULL,
+  `Sexe` varchar(50) DEFAULT NULL,
+  `Date_Naissance` date DEFAULT NULL,
+  `Ville_Naissance` varchar(50) DEFAULT NULL,
+  `Addresse_résidence` varchar(200) DEFAULT NULL,
+  `Code_Postal` int DEFAULT NULL,
+  `Prénom_user` varchar(50) DEFAULT NULL,
+  `Email` varchar(100) DEFAULT NULL,
+  `MotDePass` text,
+  `Admin` int DEFAULT NULL,
+  `ID_candidat` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`No_CNI`),
+  KEY `utilisateur_ibfk_1` (`ID_candidat`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

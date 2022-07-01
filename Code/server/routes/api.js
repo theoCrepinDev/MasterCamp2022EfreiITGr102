@@ -10,17 +10,7 @@ const authAdmin = require('../middleware/authAdmin');
 
 const Suffrage = require('../data/Suffrage');
 
-
-//router.get('/suffrage', (req, res) => {
-   // res.json(Suffrage)
-//})
-
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Tekxover123?',
-    database: 'db_mastercamp'
-});
+const db = require('../dbConnect');
 
 db.connect(function (err) {
     if(err) throw err;
@@ -35,6 +25,8 @@ router.post("/suffrage", async (req, res) => {
     const datFin = req.body.dateFin;
     const candidatsSuffrage = req.body.candidats;
     const heureFin = req.body.heureFin;
+
+    console.log(req.body)
 
     //on va d'abord ajouter les infos du suffrage pour récupérer son id
     db.query("INSERT INTO suffrage (Nom_suffrage, Description_suffrage, Date_fin_suffrage, Heure_fin_suffrage) values ('" + nomSuffrage + "','" + descriptionSuffrage +"','" + datFin + "','" + heureFin + "')", async (err, result) => {
@@ -84,7 +76,7 @@ const getNombreVotants = () => {
 }
 //route récupérer heure fin suffrage
 router.get("/suffrage/heureFin", async (req, res) => {
-    db.query("SELECT Heure_fin_suffrage, Date_fin_suffrage FROM suffrage order by ID_suffrage desc", async (err, resultRecupHeureFin) => {
+    db.query("SELECT Heure_fin_suffrage, Date_fin_suffrage FROM suffrage order by ID_suffrage desc limit 1", async (err, resultRecupHeureFin) => {
         if(err) throw err;
         res.json(resultRecupHeureFin);
     })
