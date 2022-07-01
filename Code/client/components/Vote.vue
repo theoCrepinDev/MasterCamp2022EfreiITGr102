@@ -20,8 +20,8 @@
         
         <h2>Candidats :</h2>
 
-        <form class="d-flex" role="search">
-            <input class="form-control me-2 search-candidat" type="search" placeholder="Search" aria-label="Search">
+        <form class="d-flex" role="search" @submit.prevent="search">
+            <input class="form-control me-2 search-candidat" type="search" placeholder="Search" aria-label="Search" v-model="query">
             <button class="btn btn-outline-dark" type="submit"  id="img-loupe"><img src="../images/Vectorloupe.png"></button>
         </form>
     </div>
@@ -102,9 +102,16 @@ module.exports =  {
             verification : false,
             candidatChoisit: null,
             voterPossible : false,
+            candidatBruts : [],
+            query: ''
         }
     },
     methods:{
+        search(){
+            this.SuffrageAffiche.candidats = this.candidatBruts.filter(candidat => {
+                return candidat.Nom_candidat.toLowerCase().includes(this.query.toLowerCase()) || candidat.Prénom_candidat.toLowerCase().includes(this.query.toLowerCase());
+            });
+        },
         async voter(candidat){
             this.verification = true
         },
@@ -149,6 +156,7 @@ module.exports =  {
         })
             .then(res => {
                 this.SuffrageAffiche = res.data;
+                this.candidatBruts = res.data.candidats;
             })
             .catch(res => {
                 this.$router.push('/Error/' + 'Veuillez vous identifier ....') 

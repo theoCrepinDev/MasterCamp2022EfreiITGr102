@@ -2,17 +2,18 @@
 <div id="container" style="margin-bottom: 100px" v-if="resultats === true">
     <div class="titre-grille-candidats" >
         
-        <h2>Majorité : {{candidats[0].Nom_candidat}}  {{candidats[0].Prénom_candidat}} </h2>
+        <h2>Majorité : {{candidats[0].Nom_candidat}}  {{candidats[0].Prénom_candidat}} <br/> Nombre de votant : {{summ}} </h2>
+        <h3>Pourcentage blanc : {{candidatBlanc.pourcentage}} <br/> Nombre de vote Blanc : {{candidatBlanc.Nombre_vote}}</h3>
 
-        <form class="d-flex" role="search">
-            <input class="form-control me-2 search-candidat" type="search" placeholder="Rechercher un candidat" aria-label="Search">
+        <form class="d-flex" role="search" @submit.prevent="search">
+            <input class="form-control me-2 search-candidat" v-model="query" type="search" placeholder="Rechercher un candidat" aria-label="Search">
             <button class="btn btn-outline-dark" type="submit"  id="img-loupe"><img src="../images/Vectorloupe.png"></button>
         </form>
     </div>
     <div class="row" style="width:80%; margin-left: auto; margin-right: auto">
     <div style="text-align: center;" v-for="(candidat, index) in candidats" :key="candidat.ID_candidat" class="col-md-4 col">
         
-        <div class="card" style="width: 85%">
+        <div class="card" style="width: 85%" v-if="candidat.Nom_candidat !== 'Blanc' && candidat.Prénom_candidat !== 'Vote'">
             <svg viewBox="0 0 36 36" class="circle-svg" style="display: inline-block; margin-left:auto">
   
                 <path class="around" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
@@ -24,8 +25,8 @@
             </svg>
             <img :src="candidat.Photo_candidat" class="card-img-top" alt="...">
             <div class="card-body">
-                <h5 class="card-title">{{candidat.Nom_candidat}} {{candidat.Prénom_candidat}} nombre vote  : {{candidat.Nombre_vote}}</h5>
-                <p class="card-text">{{candidat.Description_candidat}}</p>
+                <h5 class="card-title">{{candidat.Nom_candidat}} {{candidat.Prénom_candidat}}</h5>
+                <p class="card-text"> nombre vote  : {{candidat.Nombre_vote}} <br/>{{candidat.Description_candidat}}</p>
                         
                 <a :href="candidat.Programme_candidat" class="btn btn-outline-primary">Programme</a>
             </div>
@@ -49,10 +50,12 @@ module.exports =  {
 
         return{
             candidats: [],
+            candidatBruts: [],
             summ: 0,
             full : 0,
-            resultats: false
-
+            resultats: false,
+            candidatBlanc: null,
+            query: '',
 
 
 
@@ -62,6 +65,7 @@ module.exports =  {
         await axios.get('/api/candidats')
                         .then(rep => {
                             this.candidats = rep.data;
+                            this.candidatBruts = rep.data;
                             this.candidats.sort(function(a, b){
                             return b.Nombre_vote - a.Nombre_vote;
                             });
@@ -70,6 +74,9 @@ module.exports =  {
                                 if(candidat.Nombre_vote > this.max){
                                     this.max = candidat.Nombre_vote;
                                     this.candidatChoisit = candidat;
+                                }
+                                if(candidat.Nom_candidat === 'Blanc' && candidat.Prénom_candidat === 'Vote'){
+                                    this.candidatBlanc = candidat;
                                 }
                                 });
                             this.major = this.summ/2.0;
@@ -93,6 +100,13 @@ module.exports =  {
             })
 
         
+    },
+    methods: {
+      search(){
+        this.candidats = this.candidatBruts.filter(candidat => {
+            return candidat.Nom_candidat.toLowerCase().includes(this.query.toLowerCase()) || candidat.Prénom_candidat.toLowerCase().includes(this.query.toLowerCase());
+        });
+      },
     },
     components: {
         CompteRebours
@@ -118,9 +132,9 @@ module.exports =  {
 }
 .circle-svg {
   display: block;
-  margin: 10px auto;
+  margin: 0px auto;
+  min-height: 70px;
   max-height: 100px;
-  margin-top: 6%;
   
 }
 .circle-svg text {
@@ -243,6 +257,10 @@ module.exports =  {
     letter-spacing: 0em;
     text-align: left;
     color: #C4C4C4;
+}
+
+.card{
+  max-height: unset!important;
 }
 
 </style> 
