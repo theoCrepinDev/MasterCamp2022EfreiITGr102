@@ -26,7 +26,14 @@ router.post("/suffrage", async (req, res) => {
     const candidatsSuffrage = req.body.candidats;
     const heureFin = req.body.heureFin;
 
-    console.log(req.body)
+    const candidatBlanc = {
+        nom : "Blanc",
+        prenom : "Vote",
+        photo : "https://data.pixiz.com/output/user/frame/preview/400x400/6/8/8/5/1815886_b4cb5.jpg",
+        description : "Candidat blanc"
+    }
+
+    candidatsSuffrage.push(candidatBlanc);
 
     //on va d'abord ajouter les infos du suffrage pour récupérer son id
     db.query("INSERT INTO suffrage (Nom_suffrage, Description_suffrage, Date_fin_suffrage, Heure_fin_suffrage) values ('" + nomSuffrage + "','" + descriptionSuffrage +"','" + datFin + "','" + heureFin + "')", async (err, result) => {

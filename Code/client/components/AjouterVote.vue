@@ -95,7 +95,7 @@
         </div>
 
         <!--Affichage des candidat en cours d'ajout-->
-        <div>
+        <div style="margin-top: 50px;">
             <div class="grille-candidats" v-if="etape === 2 || validation === true">
                 <div class="row row-cols-1 row-cols-md-3 g-4 center">
                     <div class="col" v-for="candidat in ajoutCandidats" :key="candidat.id">
