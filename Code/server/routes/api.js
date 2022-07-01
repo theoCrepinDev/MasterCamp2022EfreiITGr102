@@ -239,13 +239,7 @@ router.get('/candidats', async (req, res) => {
 
 // route au chargement de la page pour regarder si le token est valide et récupérer infos
 router.get('/utilisateur', auth, async (req, res) => {
-    // try {
-    //     const token = req.headers.authorization.split(' ')[1];
-    //     const decoded = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-    //     req.userCNI = decoded.userCNI;
-    //     if(req.body.userCNI && req.body.userCNI !== userCNI){
-    //         throw 'User not authenticated';
-    //     }else{
+
             const sql = 'SELECT * FROM utilisateur WHERE No_CNI = ' + req.userCNI;
             db.query(sql, async (err, result) => {
                 if(err) throw err;
@@ -262,13 +256,7 @@ router.get('/utilisateur', auth, async (req, res) => {
                 res.status(200).json(user)
                 
             })
-    //     }
-    // } catch (error) {
-    //     return res.status(401).json({
-    //     message: 'Auth failed',
-    //     error: new Error('Auth failed')
-    //     });
-    // }
+
 })
 
   //Inscription d'un nouvel utilisateur
